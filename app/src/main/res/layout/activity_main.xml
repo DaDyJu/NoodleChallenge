@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity">
 
-    <TextView
-        android:id="@+id/timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Hello World!" />
-
-
     <Button
         android:id="@+id/find_game_btn"
         android:layout_width="wrap_content"
