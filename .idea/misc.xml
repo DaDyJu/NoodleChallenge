@@ -34,15 +34,6 @@
           <State>
             <id />
           </State>
-          <State>
-            <id>Android &gt; Lint &gt; Performance</id>
-          </State>
-          <State>
-            <id>Error handlingJava</id>
-          </State>
-          <State>
-            <id>Java</id>
-          </State>
         </expanded-state>
         <selected-state>
           <State>
@@ -67,8 +58,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="SvnConfiguration">
-    <configuration>$USER_HOME$/.subversion</configuration>
   </component>
 </project>
