@@ -34,6 +34,7 @@ import android.widget.TextView;
 import java.lang.reflect.Array;
 
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
+import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +60,8 @@ public class GameActivity extends AppCompatActivity {
     private ImageView noodleBowl;
     private ImageView chopStickUp;
     private ImageView chopStickDown;
-
+    private ImageView powerUpsendNoods;
+    private ImageView powerUpsendVirate;
     private MediaPlayer mediaPlayer;
 
     private ViewGroup container;
@@ -112,6 +114,10 @@ public class GameActivity extends AppCompatActivity {
         chopStickUp = (ImageView) findViewById(R.id.chopstick_up);
         chopStickDown = (ImageView) findViewById(R.id.chopstick_down);
         noodleBowl = (ImageView) findViewById(R.id.noodle_bowl);
+        powerUpsendNoods = (ImageView) findViewById(R.id.powerup_send_noodle);
+        powerUpsendVirate = (ImageView) findViewById(R.id.powerup_send_vibrate);
+
+        setUpPowerListner();
 
         mediaPlayer = new MediaPlayer();
 
@@ -187,7 +193,31 @@ public class GameActivity extends AppCompatActivity {
             }
         }.start();
 
-        handlePowerup(SendVibrate);
+        //handlePowerup(SendVibrate);
+    }
+
+    private void setUpPowerListner() {
+        powerUpsendNoods.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ParticleSystem(GameActivity.this, 100, R.drawable.sendnoods_particle, 1000)
+                        .setSpeedRange(0.2f, 0.3f)
+                        .oneShot(powerUpsendNoods, 100);
+                powerUpsendNoods.setAlpha(127);
+                powerUpsendNoods.setClickable(false);
+            }
+        });
+
+        powerUpsendVirate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ParticleSystem(GameActivity.this, 100, R.drawable.vibrate_particle, 1000)
+                        .setSpeedRange(0.2f, 0.3f)
+                        .oneShot(powerUpsendVirate, 100);
+                powerUpsendVirate.setAlpha(127);
+                powerUpsendVirate.setClickable(false);
+            }
+        });
     }
 
     public void handlePowerup(Types type) {
