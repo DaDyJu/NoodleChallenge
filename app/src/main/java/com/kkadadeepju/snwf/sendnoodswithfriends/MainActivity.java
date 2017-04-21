@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    SocketManager manager;
     private Button findGame;
     private ArrayList<ImageView> figureImgs = new ArrayList<>();
     private MediaPlayer mediaPlayer;
@@ -45,16 +45,11 @@ public class MainActivity extends AppCompatActivity {
                 // TODO: send request to the server
                 mediaPlayer.stop();
 
-                Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
-                startActivity(myIntent);
+                manager = new SocketManager(MainActivity.this);
+                manager.connect();
             }
         });
         // TODO: show acknowledge dialog when game is ready to enter
-
-
-
-        SocketManager manager = new SocketManager();
-       // manager.connect();
     }
 
     @Override
