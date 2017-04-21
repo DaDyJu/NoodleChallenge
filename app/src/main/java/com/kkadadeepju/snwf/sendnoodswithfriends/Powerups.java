@@ -7,6 +7,7 @@ package com.kkadadeepju.snwf.sendnoodswithfriends;
 public class Powerups {
     public enum Types {
         SendNoods,
-        SendLag
+        SendLag,
+        SendVibrate
     }
 }

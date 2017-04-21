@@ -1,6 +1,7 @@
 package com.kkadadeepju.snwf.sendnoodswithfriends;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.animation.AnimatorSet;
@@ -9,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PersistableBundle;
+import android.os.Vibrator;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
@@ -25,13 +29,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.lang.reflect.Array;
+
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.*;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendNoods;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibrate;
 
 /**
  * Created by jzhou on 2017-04-20.
@@ -82,6 +91,9 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.game_activity);
         container = (ViewGroup) findViewById(R.id.container);
         timer = (TextView) findViewById(R.id.timer);
@@ -155,7 +167,7 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(20000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timer.setText("seconds remaining: " + millisUntilFinished / 1000);
             }
@@ -166,7 +178,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }.start();
 
-        handlePowerup(SendNoods);
+        handlePowerup(SendVibrate);
     }
 
     public void handlePowerup(Types type) {
@@ -176,6 +188,9 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case SendLag:
                 onSendLag("Dadyju");
+                break;
+            case SendVibrate:
+                onSendVibrate("Dadyju");
                 break;
             default:
                 break;
@@ -211,6 +226,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void onSendLag(String playerName) {
+    }
+
+
+    private void onSendVibrate(String playerName) {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(100000);
     }
 
 
