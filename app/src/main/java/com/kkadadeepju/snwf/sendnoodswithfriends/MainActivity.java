@@ -66,6 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         SocketManager manager = new SocketManager();
-        manager.connect();
+       // manager.connect();
     }
 }

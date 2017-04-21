@@ -195,7 +195,7 @@ public class GameActivity extends AppCompatActivity {
 
         noodleBowl.setClickable(false);
         // 3 2 1 GO!
-        new CountDownTimer(20000, 1000) {
+        new CountDownTimer(5000, 1000) {
             public void onTick(long millisUntilFinished) {
                 String text = gameStartCountdown.getText().toString();
                 noodleBowl.setClickable(false);
@@ -215,7 +215,7 @@ public class GameActivity extends AppCompatActivity {
                 gameStartCountdown.setVisibility(View.GONE);
                 // start game timer
                 noodleBowl.setClickable(true);
-                new CountDownTimer(10000, 1000) {
+                new CountDownTimer(30000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         timer.setText("seconds remaining: " + millisUntilFinished / 1000);
                     }
@@ -232,7 +232,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //handlePowerup(SendVibrate);
     }
 
     private void setUpPowerListner() {
