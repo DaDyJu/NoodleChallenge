@@ -57,6 +57,7 @@ import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibra
 
 public class GameActivity extends AppCompatActivity {
 
+    private final int GAME_TIME_MILLIS = 30000;
     private TextView timer;
     private TextView playerTwoScore;
     private TextView playerThreeScore;
@@ -67,7 +68,13 @@ public class GameActivity extends AppCompatActivity {
     private ImageView chopStickDown;
     private ImageView powerUpsendNoods;
     private ImageView powerUpsendVirate;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer1;
+    private MediaPlayer mediaPlayer2;
+    private MediaPlayer mediaPlayer3;
+
+    private boolean mp1Released = true;
+    private boolean mp2Released = true;
+    private boolean mp3Released = true;
 
     private ViewGroup container;
     private ViewGroup sendNoodsLayout;
@@ -125,7 +132,9 @@ public class GameActivity extends AppCompatActivity {
 
         setUpPowerListner();
 
-        mediaPlayer = new MediaPlayer();
+        mediaPlayer1 = new MediaPlayer();
+        mediaPlayer2 = new MediaPlayer();
+        mediaPlayer3 = new MediaPlayer();
 
         mBowlStack = ContextCompat.getDrawable(getApplicationContext(), R.drawable.noods_10);
 
@@ -136,6 +145,8 @@ public class GameActivity extends AppCompatActivity {
         for (int i = 0; i < bowls.length; i++) {
             images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
         }
+
+        timer.setText("Seconds remaining: " + GAME_TIME_MILLIS / 1000);
 
         sendNoodsLayout = (ViewGroup) findViewById(R.id.send_noods_layout);
         sendNoodsLayout.setVisibility(View.GONE);
@@ -215,14 +226,15 @@ public class GameActivity extends AppCompatActivity {
                 gameStartCountdown.setVisibility(View.GONE);
                 // start game timer
                 noodleBowl.setClickable(true);
-                new CountDownTimer(30000, 1000) {
+                new CountDownTimer(GAME_TIME_MILLIS, 1000) {
                     public void onTick(long millisUntilFinished) {
-                        timer.setText("seconds remaining: " + millisUntilFinished / 1000);
+                        timer.setText("Seconds remaining: " + millisUntilFinished / 1000);
                     }
 
                     public void onFinish() {
-                        timer.setText("done!");
+                        timer.setText("GAME OVER");
                         noodleBowl.setClickable(false);
+                        resetMPs();
                     }
                 }.start();
             }
@@ -232,6 +244,24 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mediaPlayer1 = new MediaPlayer();
+        mediaPlayer2 = new MediaPlayer();
+        mediaPlayer3 = new MediaPlayer();
+    }
+
+    private void resetMPs() {
+        if (mediaPlayer1 != null) {
+            mediaPlayer1.stop();
+            mediaPlayer1.release();
+        }
+        if (mediaPlayer2 != null) {
+            mediaPlayer2.stop();
+            mediaPlayer2.release();
+        }
+        if (mediaPlayer3 != null) {
+            mediaPlayer3.stop();
+            mediaPlayer3.release();
+        }
     }
 
     private void setUpPowerListner() {
@@ -303,11 +333,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void playOiSound() {
-        mediaPlayer.reset();
-
         Random rand = new Random();
         int num = rand.nextInt(3) + 1;
 
+        MediaPlayer mediaPlayer = new MediaPlayer();
         if (num == 1) {
             mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oi_1);
         } else if (num == 2) {
@@ -316,7 +345,57 @@ public class GameActivity extends AppCompatActivity {
             mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oi_3);
         }
 
-        mediaPlayer.start();
+        int mp = 0;
+
+        if (mp1Released) {
+            mediaPlayer1 = mediaPlayer;
+            mp2Released = false;
+            mp = 1;
+        } else if (mp2Released) {
+            mediaPlayer2 = mediaPlayer;
+            mp2Released = false;
+            mp = 2;
+        } else {
+            if (!mp3Released) {
+                mediaPlayer3.stop();
+                mediaPlayer3.release();
+            }
+            mediaPlayer2 = mediaPlayer;
+            mp3Released = false;
+            mp = 3;
+        }
+
+        if (mp == 1) {
+            mediaPlayer1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    mp.release();
+                    mp1Released = true;
+                }
+            });
+            mediaPlayer1.start();
+        } else if (mp == 2) {
+            mediaPlayer2.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    mp.release();
+                    mp2Released = true;
+                }
+            });
+            mediaPlayer2.start();
+        } else {
+            mediaPlayer3.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    mp.release();
+                    mp3Released = true;
+                }
+            });
+            mediaPlayer3.start();
+        }
     }
 
     private void onSendLag(String playerName) {
