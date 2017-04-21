@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +53,7 @@ public class GameActivity extends AppCompatActivity {
             R.drawable.noods_09
     };
 
-    private ArrayList<Bitmap> images = new ArrayList<>();
+    private ArrayList<Drawable> images = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class GameActivity extends AppCompatActivity {
         noodleBowl = (ImageView) findViewById(R.id.noodle_bowl);
 
         for (int i = 0; i < bowls.length; i++) {
-            images.add(BitmapFactory.decodeResource(getResources(), bowls[i]));
+            images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
         }
 
         final Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
@@ -83,7 +84,7 @@ public class GameActivity extends AppCompatActivity {
                 if (imgPosition == 9) {
                     imgPosition = 0;
                 }
-                noodleBowl.setImageBitmap(images.get(imgPosition));
+                noodleBowl.setImageDrawable(images.get(imgPosition));
                 imgPosition++;
 
                 if (isChopstickUp)
@@ -105,7 +106,7 @@ public class GameActivity extends AppCompatActivity {
 
         new
 
-                CountDownTimer(60000, 1000) {
+                CountDownTimer(10000, 1000) {
 
                     public void onTick(long millisUntilFinished) {
                         timer.setText("seconds remaining: " + millisUntilFinished / 1000);
@@ -113,6 +114,7 @@ public class GameActivity extends AppCompatActivity {
 
                     public void onFinish() {
                         timer.setText("done!");
+                        noodleBowl.setClickable(false);
                     }
                 }.start();
     }
