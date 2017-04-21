@@ -37,8 +37,8 @@ public class SocketManager {
     }
 
     public void connect() {
-        mSocket.on(Socket.EVENT_CONNECT,onConnect);
-        mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
+        mSocket.on(Socket.EVENT_CONNECT, onConnect);
+        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
 
@@ -91,7 +91,7 @@ public class SocketManager {
         public void call(Object... args) {
             // If true, find session
             System.out.println("joined room");
-            JSONObject obj = (JSONObject)args[0];
+            JSONObject obj = (JSONObject) args[0];
         }
     };
 
@@ -100,8 +100,9 @@ public class SocketManager {
         public void call(Object... args) {
             // If true, find session
             System.out.println("session started");
-            JSONObject obj = (JSONObject)args[0];
+            JSONObject obj = (JSONObject) args[0];
 
+            activity.shutdownLoadingDialog();
             Intent myIntent = new Intent(activity.getApplicationContext(), GameActivity.class);
             activity.startActivity(myIntent);
         }

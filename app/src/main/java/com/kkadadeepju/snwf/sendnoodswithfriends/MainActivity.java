@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     SocketManager manager;
     private Button findGame;
+    private ProgressBar loadingDialog;
     private ArrayList<ImageView> figureImgs = new ArrayList<>();
     private MediaPlayer mediaPlayer;
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findGame = (Button) findViewById(R.id.find_game_btn);
+        loadingDialog = (ProgressBar) findViewById(R.id.loadingDialog);
         figureImgs.add((ImageView) findViewById(R.id.figure_one));
         figureImgs.add((ImageView) findViewById(R.id.figure_two));
         figureImgs.add((ImageView) findViewById(R.id.figure_three));
@@ -43,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: send request to the server
-                mediaPlayer.stop();
-
+                showLoadingDialog();
                 manager = new SocketManager(MainActivity.this);
                 manager.connect();
             }
@@ -75,5 +77,14 @@ public class MainActivity extends AppCompatActivity {
 
         });
         mediaPlayer.start();
+    }
+
+    public void showLoadingDialog() {
+        loadingDialog.setVisibility(View.VISIBLE);
+        findGame.setVisibility(View.INVISIBLE);
+    }
+
+    public void shutdownLoadingDialog() {
+        mediaPlayer.stop();
     }
 }
