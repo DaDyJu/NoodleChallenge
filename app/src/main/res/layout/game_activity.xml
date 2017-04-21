@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5f679c"
     android:orientation="vertical">
 
     <TextView
@@ -38,6 +40,17 @@
             android:text="Player 3 Score: " />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/player_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#000000"
+        android:textSize="60sp" />
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -48,7 +61,7 @@
             android:layout_width="300dp"
             android:layout_height="250dp"
             android:layout_gravity="center"
-            android:src="@drawable/noods_full" />
+            android:src="@drawable/noods_01" />
 
         <ImageView
             android:id="@+id/chopstick_down"
@@ -66,7 +79,8 @@
             android:layout_gravity="center"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="-60dp"
-            android:src="@drawable/chopstick_up" />
+            android:src="@drawable/chopstick_up"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/noodle_powerup"
@@ -74,5 +88,9 @@
             android:layout_height="80dp"
             android:layout_gravity="bottom|center"
             android:src="@drawable/shaking_icon" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ListView>
     </FrameLayout>
 </RelativeLayout>

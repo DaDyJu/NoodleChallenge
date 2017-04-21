@@ -33,24 +33,16 @@ public class MainActivity extends AppCompatActivity {
         figureImgs.add((ImageView) findViewById(R.id.figure_six));
         final Animation shake = AnimationUtils.loadAnimation(this, R.anim.toggle);
 
+        for (ImageView img : figureImgs) {
+            img.startAnimation(shake);
+        }
+
         findGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: send request to the server
-//                for (ImageView img : figureImgs) {
-//                    img.startAnimation(shake);
-//                }
                 Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(myIntent);
-
-//                final Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
-//                        startActivity(myIntent);
-//                    }
-//                }, 3000);
             }
         });
         // TODO: show acknowledge dialog when game is ready to enter
