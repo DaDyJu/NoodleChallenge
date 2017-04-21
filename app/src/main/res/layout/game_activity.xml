@@ -23,13 +23,6 @@
         android:layout_alignParentTop="true"
         android:text="Time remaining" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,15 +99,12 @@
                 android:layout_gravity="bottom|center"
                 android:src="@drawable/shaking_icon" />
 
-            <ListView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"></ListView>
         </FrameLayout>
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/finished_bowl"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -128,4 +118,4 @@
     <include
         android:id="@+id/send_noods_layout"
         layout="@layout/send_noods"/>
-</RelativeLayout>
+</FrameLayout>
