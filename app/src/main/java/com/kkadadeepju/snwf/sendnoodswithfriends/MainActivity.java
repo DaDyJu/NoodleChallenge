@@ -35,18 +35,6 @@ public class MainActivity extends AppCompatActivity {
         figureImgs.add((ImageView) findViewById(R.id.figure_six));
         final Animation shake = AnimationUtils.loadAnimation(this, R.anim.toggle);
 
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.theme_music);
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            public void onCompletion(MediaPlayer mp) {
-                mediaPlayer.create(getApplicationContext(), R.raw.theme_music);
-                mediaPlayer.start();
-            }
-
-        });
-        mediaPlayer.start();
-
         for (ImageView img : figureImgs) {
             img.startAnimation(shake);
         }
@@ -66,6 +54,31 @@ public class MainActivity extends AppCompatActivity {
 
 
         SocketManager manager = new SocketManager();
-        manager.connect();
+       // manager.connect();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startMusic();
+    }
+
+    private void startMusic() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.theme_music);
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            public void onCompletion(MediaPlayer mp) {
+                mediaPlayer.create(getApplicationContext(), R.raw.theme_music);
+                mediaPlayer.start();
+            }
+
+        });
+        mediaPlayer.start();
     }
 }
