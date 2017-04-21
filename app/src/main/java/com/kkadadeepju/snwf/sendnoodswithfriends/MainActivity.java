@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO: send request to the server
                 mediaPlayer.stop();
-                mediaPlayer.release();
+
                 Intent myIntent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(myIntent);
             }
