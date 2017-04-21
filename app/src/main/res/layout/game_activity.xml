@@ -118,4 +118,14 @@
     <include
         android:id="@+id/send_noods_layout"
         layout="@layout/send_noods"/>
+
+    <com.kkadadeepju.snwf.sendnoodswithfriends.widget.SolidRedShadowTextView
+        android:id="@+id/starting_text"
+        android:textSize="100sp"
+        android:textColor="#ffffff"
+        android:fontFamily="sans-serif-medium"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GO!"/>
 </FrameLayout>

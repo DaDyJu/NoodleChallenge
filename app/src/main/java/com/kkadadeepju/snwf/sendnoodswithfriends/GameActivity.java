@@ -13,13 +13,18 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +54,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView chopStickDown;
     private ViewGroup container;
     private ViewGroup sendNoodsLayout;
+    private TextView gameStartCountdown;
 
     private LinearLayout finishedBowlContainer;
     private BowlImageView finishedBowl;
@@ -155,18 +161,51 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        new CountDownTimer(10000, 1000) {
+        gameStartCountdown = (TextView) findViewById(R.id.starting_text);
+        gameStartCountdown.setText("4");
+
+        final Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pulse);
+
+        noodleBowl.setClickable(false);
+        // 3 2 1 GO!
+        new CountDownTimer(5000, 1000) {
+            @Override
             public void onTick(long millisUntilFinished) {
-                timer.setText("seconds remaining: " + millisUntilFinished / 1000);
+                String text = gameStartCountdown.getText().toString();
+                noodleBowl.setClickable(false);
+                if (!text.equals("GO!")) {
+                    int count = Integer.parseInt(text);
+                    if (count > 1) {
+                        count--;
+                        gameStartCountdown.setText(Integer.toString(count));
+                    } else {
+                        gameStartCountdown.setText("GO!");
+                    }
+                }
             }
 
+            @Override
             public void onFinish() {
-                timer.setText("done!");
-                noodleBowl.setClickable(false);
+                gameStartCountdown.setVisibility(View.GONE);
+                // start game timer
+                noodleBowl.setClickable(true);
+                new CountDownTimer(10000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        timer.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    }
+
+                    public void onFinish() {
+                        timer.setText("done!");
+                        noodleBowl.setClickable(false);
+                    }
+                }.start();
             }
         }.start();
+    }
 
-        handlePowerup(SendNoods);
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void handlePowerup(Types type) {
@@ -212,6 +251,4 @@ public class GameActivity extends AppCompatActivity {
 
     private void onSendLag(String playerName) {
     }
-
-
 }
