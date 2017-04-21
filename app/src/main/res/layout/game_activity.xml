@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#5f679c"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:orientation="vertical">
 
     <TextView
@@ -54,7 +56,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <ImageView
             android:id="@+id/noodle_bowl"
@@ -89,8 +93,18 @@
             android:layout_gravity="bottom|center"
             android:src="@drawable/shaking_icon" />
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></ListView>
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/finished_bowl"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+    </LinearLayout>
 </RelativeLayout>

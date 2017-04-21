@@ -10,12 +10,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +39,16 @@ public class GameActivity extends AppCompatActivity {
     private ImageView chopStickUp;
     private ImageView chopStickDown;
 
+    private LinearLayout finishedBowlContainer;
+    private BowlImageView finishedBowl;
+
     private int score = 0;
 
     private int imgPosition = 0;
 
     private boolean isChopstickUp = false;
+
+    private Drawable mBowlStack;
 
     private static final int[] bowls = {
             R.drawable.noods_01,
@@ -69,11 +78,23 @@ public class GameActivity extends AppCompatActivity {
         chopStickDown = (ImageView) findViewById(R.id.chopstick_down);
         noodleBowl = (ImageView) findViewById(R.id.noodle_bowl);
 
+
+        mBowlStack = ContextCompat.getDrawable(getApplicationContext(), R.drawable.noods_10);
+
+        final float imgSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+
+        finishedBowlContainer = (LinearLayout) findViewById(R.id.finished_bowl);
+
+
         for (int i = 0; i < bowls.length; i++) {
             images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
         }
 
+
         final Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
+
+        final LinearLayout.LayoutParams bowlStackLayout = new LinearLayout.LayoutParams((int) imgSize, (int) imgSize);
+        bowlStackLayout.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -15, getResources().getDisplayMetrics());
 
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,19 +104,20 @@ public class GameActivity extends AppCompatActivity {
 
                 if (imgPosition == 9) {
                     imgPosition = 0;
+                    finishedBowl = new BowlImageView(GameActivity.this);
+                    finishedBowl.setImageDrawable(mBowlStack);
+
+                    finishedBowl.setLayoutParams(bowlStackLayout);
+                    finishedBowlContainer.addView(finishedBowl, 0);
                 }
                 noodleBowl.setImageDrawable(images.get(imgPosition));
                 imgPosition++;
 
-                if (isChopstickUp)
-
-                {
+                if (isChopstickUp) {
                     chopStickUp.setVisibility(View.GONE);
                     chopStickDown.setVisibility(View.VISIBLE);
                     isChopstickUp = false;
-                } else
-
-                {
+                } else {
                     chopStickUp.setVisibility(View.VISIBLE);
                     chopStickDown.setVisibility(View.GONE);
                     isChopstickUp = true;
@@ -104,19 +126,17 @@ public class GameActivity extends AppCompatActivity {
         });
 
 
-        new
+        new CountDownTimer(20000, 1000) {
 
-                CountDownTimer(10000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                timer.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
 
-                    public void onTick(long millisUntilFinished) {
-                        timer.setText("seconds remaining: " + millisUntilFinished / 1000);
-                    }
-
-                    public void onFinish() {
-                        timer.setText("done!");
-                        noodleBowl.setClickable(false);
-                    }
-                }.start();
+            public void onFinish() {
+                timer.setText("done!");
+                noodleBowl.setClickable(false);
+            }
+        }.start();
     }
 
 }
