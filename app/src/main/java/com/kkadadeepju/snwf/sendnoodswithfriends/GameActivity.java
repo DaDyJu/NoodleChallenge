@@ -116,18 +116,6 @@ public class GameActivity extends AppCompatActivity {
         sendNoods.add((ImageView) findViewById(R.id.send_noods_6));
         sendNoods.add((ImageView) findViewById(R.id.send_noods_7));
         sendNoods.add((ImageView) findViewById(R.id.send_noods_8));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_9));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_10));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_11));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_12));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_13));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_14));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_15));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_16));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_17));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_18));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_19));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_20));
 
         final Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
 
