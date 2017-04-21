@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,10 +22,11 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.lang.reflect.Array;
+import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +50,9 @@ public class GameActivity extends AppCompatActivity {
     private ViewGroup container;
     private ViewGroup sendNoodsLayout;
 
+    private LinearLayout finishedBowlContainer;
+    private BowlImageView finishedBowl;
+
     private int score = 0;
 
     private int imgPosition = 0;
@@ -56,6 +61,7 @@ public class GameActivity extends AppCompatActivity {
 
     private boolean isSendNoodsActive = false;
     private int numberOfSendNoodsLeft;
+    private Drawable mBowlStack;
 
     private static final int[] bowls = {
             R.drawable.noods_01,
@@ -88,6 +94,14 @@ public class GameActivity extends AppCompatActivity {
         chopStickDown = (ImageView) findViewById(R.id.chopstick_down);
         noodleBowl = (ImageView) findViewById(R.id.noodle_bowl);
 
+
+        mBowlStack = ContextCompat.getDrawable(getApplicationContext(), R.drawable.noods_10);
+
+        final float imgSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+
+        finishedBowlContainer = (LinearLayout) findViewById(R.id.finished_bowl);
+
+
         for (int i = 0; i < bowls.length; i++) {
             images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
         }
@@ -117,6 +131,9 @@ public class GameActivity extends AppCompatActivity {
 
         final Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
 
+        final LinearLayout.LayoutParams bowlStackLayout = new LinearLayout.LayoutParams((int) imgSize, (int) imgSize);
+        bowlStackLayout.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -15, getResources().getDisplayMetrics());
+
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +146,11 @@ public class GameActivity extends AppCompatActivity {
 
                 if (imgPosition == 9) {
                     imgPosition = 0;
+                    finishedBowl = new BowlImageView(GameActivity.this);
+                    finishedBowl.setImageDrawable(mBowlStack);
+
+                    finishedBowl.setLayoutParams(bowlStackLayout);
+                    finishedBowlContainer.addView(finishedBowl, 0);
                 }
                 noodleBowl.setImageDrawable(images.get(imgPosition));
                 imgPosition++;
@@ -183,11 +205,6 @@ public class GameActivity extends AppCompatActivity {
         for (int i = 0; i < sendNoods.size(); i++) {
             sendNoods.get(i).setVisibility(View.VISIBLE);
 
-            ObjectAnimator
-                    .ofFloat(sendNoods.get(i), "translationX", 0, 25, -25, 25, -25,15, -15, 6, -6, 0)
-                    .setDuration(20)
-                    .start();
-
             sendNoods.get(i).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
@@ -206,7 +223,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void onSendLag(String playerName) {
-        // receieved lag from a player, cant tap for X seconds
     }
 
 
