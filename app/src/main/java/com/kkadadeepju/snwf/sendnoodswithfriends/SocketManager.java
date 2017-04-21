@@ -8,6 +8,8 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by dportetrachsel on 4/20/17.
@@ -36,6 +38,9 @@ public class SocketManager {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            HashMap map = new HashMap();
+            map.put("clientId", "1");
+            mSocket.emit("CONNECTED", map);
         }
     };
 
