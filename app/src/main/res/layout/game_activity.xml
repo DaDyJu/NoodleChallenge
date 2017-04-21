@@ -90,15 +90,36 @@
                 android:src="@drawable/chopstick_up"
                 android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/noodle_powerup"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
-                android:src="@drawable/shaking_icon" />
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/powerup_send_noodle"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/powerup_sendnoods" />
+
+                <ImageView
+                    android:id="@+id/powerup_send_vibrate"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/powerup_vibrate" />
+            </LinearLayout>
+
 
         </FrameLayout>
     </RelativeLayout>
+
+    <include
+        android:id="@+id/send_noods_layout"
+        layout="@layout/send_noods"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/finished_bowl"
@@ -112,9 +133,4 @@
         android:orientation="vertical">
 
     </LinearLayout>
-
-    <include
-        android:id="@+id/send_noods_layout"
-        layout="@layout/send_noods"
-        android:visibility="gone" />
 </FrameLayout>
