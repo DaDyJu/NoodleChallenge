@@ -265,7 +265,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void playOiSound() {
-        mediaPlayer.stop();
+        mediaPlayer.reset();
 
         Random rand = new Random();
         int num = rand.nextInt(3) + 1;
