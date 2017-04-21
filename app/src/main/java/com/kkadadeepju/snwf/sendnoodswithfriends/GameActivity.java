@@ -1,33 +1,47 @@
 package com.kkadadeepju.snwf.sendnoodswithfriends;
 
+import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PersistableBundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import java.lang.reflect.Array;
+import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.*;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendNoods;
+
 
 /**
  * Created by jzhou on 2017-04-20.
  */
 
 public class GameActivity extends AppCompatActivity {
+
     private TextView timer;
     private TextView playerTwoScore;
     private TextView playerThreeScore;
@@ -36,13 +50,25 @@ public class GameActivity extends AppCompatActivity {
     private ImageView noodleBowl;
     private ImageView chopStickUp;
     private ImageView chopStickDown;
+
     private MediaPlayer mediaPlayer;
+
+    private ViewGroup container;
+    private ViewGroup sendNoodsLayout;
+
+    private LinearLayout finishedBowlContainer;
+    private BowlImageView finishedBowl;
+
 
     private int score = 0;
 
     private int imgPosition = 0;
 
     private boolean isChopstickUp = false;
+
+    private boolean isSendNoodsActive = false;
+    private int numberOfSendNoodsLeft;
+    private Drawable mBowlStack;
 
     private static final int[] bowls = {
             R.drawable.noods_01,
@@ -56,12 +82,15 @@ public class GameActivity extends AppCompatActivity {
             R.drawable.noods_09
     };
 
+    private ArrayList<ImageView> sendNoods = new ArrayList<>();
+
     private ArrayList<Drawable> images = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_activity);
+        container = (ViewGroup) findViewById(R.id.container);
         timer = (TextView) findViewById(R.id.timer);
         playerTwoScore = (TextView) findViewById(R.id.player_two_score);
         playerThreeScore = (TextView) findViewById(R.id.player_three_score);
@@ -74,35 +103,60 @@ public class GameActivity extends AppCompatActivity {
 
         mediaPlayer = new MediaPlayer();
 
+        mBowlStack = ContextCompat.getDrawable(getApplicationContext(), R.drawable.noods_10);
+
+        final float imgSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+
+        finishedBowlContainer = (LinearLayout) findViewById(R.id.finished_bowl);
+
         for (int i = 0; i < bowls.length; i++) {
             images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
         }
 
+        sendNoodsLayout = (ViewGroup) findViewById(R.id.send_noods_layout);
+        sendNoodsLayout.setVisibility(View.GONE);
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_1));
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_2));
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_3));
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_4));
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_5));
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_6));
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_7));
+        sendNoods.add((ImageView) findViewById(R.id.send_noods_8));
+
         final Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
+
+        final LinearLayout.LayoutParams bowlStackLayout = new LinearLayout.LayoutParams((int) imgSize, (int) imgSize);
+        bowlStackLayout.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -15, getResources().getDisplayMetrics());
 
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playOiSound();
 
+                if (isSendNoodsActive) {
+                    return;
+                }
+
                 playerScore.setText(Integer.toString(++score));
                 playerScore.startAnimation(pulse);
 
                 if (imgPosition == 9) {
                     imgPosition = 0;
+                    finishedBowl = new BowlImageView(GameActivity.this);
+                    finishedBowl.setImageDrawable(mBowlStack);
+
+                    finishedBowl.setLayoutParams(bowlStackLayout);
+                    finishedBowlContainer.addView(finishedBowl, 0);
                 }
                 noodleBowl.setImageDrawable(images.get(imgPosition));
                 imgPosition++;
 
-                if (isChopstickUp)
-
-                {
+                if (isChopstickUp) {
                     chopStickUp.setVisibility(View.GONE);
                     chopStickDown.setVisibility(View.VISIBLE);
                     isChopstickUp = false;
-                } else
-
-                {
+                } else {
                     chopStickUp.setVisibility(View.VISIBLE);
                     chopStickDown.setVisibility(View.GONE);
                     isChopstickUp = true;
@@ -110,20 +164,59 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        new CountDownTimer(10000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                timer.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
 
-        new
+            public void onFinish() {
+                timer.setText("done!");
+                noodleBowl.setClickable(false);
+            }
+        }.start();
 
-                CountDownTimer(10000, 1000) {
+        handlePowerup(SendNoods);
+    }
 
-                    public void onTick(long millisUntilFinished) {
-                        timer.setText("seconds remaining: " + millisUntilFinished / 1000);
+    public void handlePowerup(Types type) {
+        switch (type) {
+            case SendNoods:
+                onSendNoods("Dadyju");
+                break;
+            case SendLag:
+                onSendLag("Dadyju");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void onSendNoods(String playerName) {
+        // received a bunch of noods from playerName
+        // fills up their whole screen with noodles, their score does not count until their extra noodles are gone
+        // and they are back to tapping on their regular noodle bowl
+        isSendNoodsActive = true;
+        sendNoodsLayout.setVisibility(View.VISIBLE);
+        numberOfSendNoodsLeft = sendNoods.size();
+
+        for (int i = 0; i < sendNoods.size(); i++) {
+            sendNoods.get(i).setVisibility(View.VISIBLE);
+
+            sendNoods.get(i).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            v.setVisibility(View.INVISIBLE);
+                            numberOfSendNoodsLeft--;
+
+                            if (numberOfSendNoodsLeft <= 0) {
+                                isSendNoodsActive = false;
+                                sendNoodsLayout.setVisibility(View.GONE);
+                            }
+                        }
                     }
-
-                    public void onFinish() {
-                        timer.setText("done!");
-                        noodleBowl.setClickable(false);
-                    }
-                }.start();
+            );
+        }
     }
 
     public void playOiSound() {
@@ -143,5 +236,8 @@ public class GameActivity extends AppCompatActivity {
         }
 
         mediaPlayer.start();
+    }
+
+    private void onSendLag(String playerName) {
     }
 }
