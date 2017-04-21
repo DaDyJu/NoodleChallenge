@@ -62,5 +62,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // TODO: show acknowledge dialog when game is ready to enter
+
+
+
+        SocketManager manager = new SocketManager();
+        manager.connect();
     }
 }
