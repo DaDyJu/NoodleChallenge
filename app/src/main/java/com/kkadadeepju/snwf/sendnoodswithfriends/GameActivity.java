@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import java.lang.reflect.Array;
 
+import com.kkadadeepju.snwf.sendnoodswithfriends.dialog.EndOfTurnDIalog;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import com.plattysoft.leonids.ParticleSystem;
 
@@ -146,7 +147,7 @@ public class GameActivity extends AppCompatActivity {
             images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
         }
 
-        timer.setText("Seconds remaining: " + GAME_TIME_MILLIS / 1000);
+        timer.setText(GAME_TIME_MILLIS / 1000 + "s");
 
         sendNoodsLayout = (ViewGroup) findViewById(R.id.send_noods_layout);
         sendNoodsLayout.setVisibility(View.GONE);
@@ -223,18 +224,21 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                noodleBowl.setClickable(false);
                 gameStartCountdown.setVisibility(View.GONE);
                 // start game timer
                 noodleBowl.setClickable(true);
                 new CountDownTimer(GAME_TIME_MILLIS, 1000) {
                     public void onTick(long millisUntilFinished) {
-                        timer.setText("Seconds remaining: " + millisUntilFinished / 1000);
+                        timer.setText(millisUntilFinished / 1000 + "s");
                     }
 
                     public void onFinish() {
                         timer.setText("GAME OVER");
                         noodleBowl.setClickable(false);
                         resetMPs();
+                        EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
+                        result.show();
                     }
                 }.start();
             }
@@ -251,15 +255,15 @@ public class GameActivity extends AppCompatActivity {
 
     private void resetMPs() {
         if (mediaPlayer1 != null) {
-            mediaPlayer1.stop();
+            mediaPlayer1.reset();
             mediaPlayer1.release();
         }
         if (mediaPlayer2 != null) {
-            mediaPlayer2.stop();
+            mediaPlayer2.reset();
             mediaPlayer2.release();
         }
         if (mediaPlayer3 != null) {
-            mediaPlayer3.stop();
+            mediaPlayer3.reset();
             mediaPlayer3.release();
         }
     }
@@ -272,6 +276,7 @@ public class GameActivity extends AppCompatActivity {
                         .setSpeedRange(0.2f, 0.3f)
                         .oneShot(powerUpsendNoods, 100);
                 powerUpsendNoods.setAlpha(127);
+                onSendNoods("");
                 powerUpsendNoods.setClickable(false);
             }
         });
@@ -282,6 +287,7 @@ public class GameActivity extends AppCompatActivity {
                 new ParticleSystem(GameActivity.this, 100, R.drawable.vibrate_particle, 1000)
                         .setSpeedRange(0.2f, 0.3f)
                         .oneShot(powerUpsendVirate, 100);
+                onSendVibrate("");
                 powerUpsendVirate.setAlpha(127);
                 powerUpsendVirate.setClickable(false);
             }
