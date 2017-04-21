@@ -1,5 +1,6 @@
 package com.kkadadeepju.snwf.sendnoodswithfriends;
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import io.socket.emitter.Emitter;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by dportetrachsel on 4/20/17.
@@ -22,12 +24,16 @@ public class SocketManager {
 
     private Socket mSocket;
 
-    SocketManager() {
+    private MainActivity activity;
+
+    SocketManager(MainActivity act) {
         try {
             mSocket = IO.socket(Constants.SERVER_URL);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+
+        activity = act;
     }
 
     public void connect() {
@@ -40,13 +46,16 @@ public class SocketManager {
 
         mSocket.on("ackConnected", onAckConnected);
         mSocket.on("joinedRoom", onJoinedRoom);
+        mSocket.on("startSession", onStartSession);
 
         mSocket.connect();
 
         JSONObject obj = new JSONObject();
 
+        Random rand = new Random();
+        rand.setSeed(System.currentTimeMillis());
         try {
-            obj.put("clientId", 1);
+            obj.put("clientId", rand.nextInt(10000000));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -83,6 +92,18 @@ public class SocketManager {
             // If true, find session
             System.out.println("joined room");
             JSONObject obj = (JSONObject)args[0];
+        }
+    };
+
+    private Emitter.Listener onStartSession = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            // If true, find session
+            System.out.println("session started");
+            JSONObject obj = (JSONObject)args[0];
+
+            Intent myIntent = new Intent(activity.getApplicationContext(), GameActivity.class);
+            activity.startActivity(myIntent);
         }
     };
 
