@@ -5,29 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:orientation="vertical"
     android:background="#5f679c"
+    android:orientation="vertical"
     tools:context="com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
         android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/applogo" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <Button
             android:id="@+id/find_game_btn"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center"
-            android:text="Find a Match" />
+            android:padding="10dp"
+            android:text="Find a Match"
+            android:textAllCaps="false" />
     </FrameLayout>
 
     <LinearLayout

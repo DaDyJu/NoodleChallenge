@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import java.lang.reflect.Array;
 
+import com.kkadadeepju.snwf.sendnoodswithfriends.dialog.EndOfTurnDIalog;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import com.plattysoft.leonids.ParticleSystem;
 
@@ -182,13 +183,14 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        new CountDownTimer(20000, 1000) {
+        new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
                 timer.setText("seconds remaining: " + millisUntilFinished / 1000);
             }
 
             public void onFinish() {
-                timer.setText("done!");
+                EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
+                result.show();
                 noodleBowl.setClickable(false);
             }
         }.start();
