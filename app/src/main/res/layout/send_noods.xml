@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/send_noods_1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_marginTop="49dp"
+        android:layout_below="@+id/send_noods_4"
+        android:layout_alignLeft="@+id/send_noods_4"
+        android:layout_alignStart="@+id/send_noods_4" />
+    <ImageView
+        android:id="@+id/send_noods_2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_above="@+id/send_noods_3"
+        android:layout_toRightOf="@+id/send_noods_3"
+        android:layout_toEndOf="@+id/send_noods_3"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp" />
+    <ImageView
+        android:id="@+id/send_noods_3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_below="@+id/send_noods_1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp" />
+    <ImageView
+        android:id="@+id/send_noods_4"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/send_noods_7"
+        android:layout_toStartOf="@+id/send_noods_7" />
+    <ImageView
+        android:id="@+id/send_noods_5"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_alignTop="@+id/send_noods_6"
+        android:layout_alignLeft="@+id/send_noods_8"
+        android:layout_alignStart="@+id/send_noods_8"
+        android:layout_marginTop="26dp" />
+    <ImageView
+        android:id="@+id/send_noods_6"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_below="@+id/send_noods_8"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp" />
+    <ImageView
+        android:id="@+id/send_noods_7"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_alignTop="@+id/send_noods_8"
+        android:layout_toRightOf="@+id/send_noods_8"
+        android:layout_toEndOf="@+id/send_noods_8"
+        android:layout_marginLeft="37dp"
+        android:layout_marginStart="37dp" />
+    <ImageView
+        android:id="@+id/send_noods_8"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_marginLeft="96dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="63dp"
+        android:layout_below="@+id/send_noods_1"
+        android:layout_toRightOf="@+id/send_noods_6"
+        android:layout_toEndOf="@+id/send_noods_6" />
+
+    <ImageView
+        android:id="@+id/send_noods_9"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_above="@+id/send_noods_2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp" />
+
+    <ImageView
+        android:id="@+id/send_noods_10"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_below="@+id/send_noods_4"
+        android:layout_alignLeft="@+id/send_noods_7"
+        android:layout_alignStart="@+id/send_noods_7"
+        android:layout_marginTop="20dp" />
+
+    <ImageView
+        android:id="@+id/send_noods_11"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_alignTop="@+id/send_noods_10"
+        android:layout_alignLeft="@+id/send_noods_3"
+        android:layout_alignStart="@+id/send_noods_3"
+        android:layout_marginTop="14dp" />
+
+    <ImageView
+        android:id="@+id/send_noods_12"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_above="@+id/send_noods_11"
+        android:layout_toLeftOf="@+id/send_noods_4"
+        android:layout_toStartOf="@+id/send_noods_4" />
+
+    <ImageView
+        android:id="@+id/send_noods_13"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_below="@+id/send_noods_1"
+        android:layout_toRightOf="@+id/send_noods_3"
+        android:layout_toEndOf="@+id/send_noods_3" />
+
+    <ImageView
+        android:id="@+id/send_noods_14"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_alignTop="@+id/send_noods_6"
+        android:layout_toRightOf="@+id/send_noods_5"
+        android:layout_toEndOf="@+id/send_noods_5"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp" />
+
+    <ImageView
+        android:id="@+id/send_noods_15"
+        android:layout_width="80dp"
+
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_above="@+id/send_noods_5"
+        android:layout_toLeftOf="@+id/send_noods_5"
+        android:layout_toStartOf="@+id/send_noods_5" />
+
+    <ImageView
+        android:id="@+id/send_noods_16"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_below="@+id/send_noods_10"
+        android:layout_toLeftOf="@+id/send_noods_10"
+        android:layout_toStartOf="@+id/send_noods_10" />
+
+    <ImageView
+        android:id="@+id/send_noods_17"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_below="@+id/send_noods_8"
+        android:layout_toRightOf="@+id/send_noods_6"
+        android:layout_toEndOf="@+id/send_noods_6"
+        android:layout_marginTop="12dp" />
+
+    <ImageView
+        android:id="@+id/send_noods_18"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/send_noods_14"
+        android:layout_alignStart="@+id/send_noods_14" />
+
+    <ImageView
+        android:id="@+id/send_noods_19"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/noods_01"
+        android:layout_above="@+id/send_noods_16"
+        android:layout_toRightOf="@+id/send_noods_2"
+        android:layout_toEndOf="@+id/send_noods_2"
+        android:layout_marginBottom="39dp" />
+
+    <ImageView
+        android:id="@+id/send_noods_20"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+
+        android:src="@drawable/noods_01"
+        android:layout_below="@+id/send_noods_3"
+        android:layout_toLeftOf="@+id/send_noods_18"
+        android:layout_toStartOf="@+id/send_noods_18"
+        android:layout_marginTop="11dp" />
+
+</RelativeLayout>
