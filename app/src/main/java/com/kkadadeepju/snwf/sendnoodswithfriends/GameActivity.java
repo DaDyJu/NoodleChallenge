@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PersistableBundle;
@@ -37,10 +38,12 @@ import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.*;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendNoods;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibrate;
+
 
 /**
  * Created by jzhou on 2017-04-20.
@@ -56,11 +59,15 @@ public class GameActivity extends AppCompatActivity {
     private ImageView noodleBowl;
     private ImageView chopStickUp;
     private ImageView chopStickDown;
+
+    private MediaPlayer mediaPlayer;
+
     private ViewGroup container;
     private ViewGroup sendNoodsLayout;
 
     private LinearLayout finishedBowlContainer;
     private BowlImageView finishedBowl;
+
 
     private int score = 0;
 
@@ -106,13 +113,13 @@ public class GameActivity extends AppCompatActivity {
         chopStickDown = (ImageView) findViewById(R.id.chopstick_down);
         noodleBowl = (ImageView) findViewById(R.id.noodle_bowl);
 
+        mediaPlayer = new MediaPlayer();
 
         mBowlStack = ContextCompat.getDrawable(getApplicationContext(), R.drawable.noods_10);
 
         final float imgSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
 
         finishedBowlContainer = (LinearLayout) findViewById(R.id.finished_bowl);
-
 
         for (int i = 0; i < bowls.length; i++) {
             images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
@@ -137,6 +144,8 @@ public class GameActivity extends AppCompatActivity {
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                playOiSound();
+
                 if (isSendNoodsActive) {
                     return;
                 }
@@ -225,9 +234,25 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void onSendLag(String playerName) {
+    public void playOiSound() {
+        mediaPlayer.stop();
+
+        Random rand = new Random();
+        int num = rand.nextInt(3) + 1;
+
+        if (num == 1) {
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oi_1);
+        } else if (num == 2) {
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oi_2);
+        } else if (num == 3) {
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oi_3);
+        }
+
+        mediaPlayer.start();
     }
 
+    private void onSendLag(String playerName) {
+    }
 
     private void onSendVibrate(String playerName) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
