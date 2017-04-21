@@ -5,5 +5,5 @@ package com.kkadadeepju.snwf.sendnoodswithfriends;
  */
 
 public class Constants {
-    public static final String SERVER_URL = "https://socketio-chat.now.sh/";
+    public static final String SERVER_URL = "162.243.225.46/websocket";
 }

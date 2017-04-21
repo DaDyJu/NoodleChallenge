@@ -32,6 +32,7 @@ public class SocketManager {
         mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+
         mSocket.connect();
     }
 
@@ -40,7 +41,7 @@ public class SocketManager {
         public void call(Object... args) {
             HashMap map = new HashMap();
             map.put("clientId", "1");
-            mSocket.emit("CONNECTED", map);
+            mSocket.emit("connectClient", map);
         }
     };
 

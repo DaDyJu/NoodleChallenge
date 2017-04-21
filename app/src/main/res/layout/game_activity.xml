@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
 
-    android:background="#5f679c"
-    android:id="@+id/activity_main">
+    android:layout_height="match_parent"
+    android:background="#5f679c">
 
     <RelativeLayout
         android:id="@+id/container"
@@ -15,13 +14,13 @@
         android:clipToPadding="false"
         android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Time remaining" />
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Time remaining" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -88,16 +87,31 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="-60dp"
-                android:visibility="gone"
                 android:src="@drawable/chopstick_up"
-                 />
+                android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/noodle_powerup"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center"
-                android:src="@drawable/shaking_icon" />
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/powerup_send_noodle"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/powerup_sendnoods" />
+
+                <ImageView
+                    android:id="@+id/powerup_send_vibrate"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/powerup_vibrate" />
+            </LinearLayout>
+
 
         </FrameLayout>
     </RelativeLayout>
@@ -117,7 +131,8 @@
 
     <include
         android:id="@+id/send_noods_layout"
-        layout="@layout/send_noods"/>
+        layout="@layout/send_noods"
+        android:visibility="gone" />
 
     <com.kkadadeepju.snwf.sendnoodswithfriends.widget.SolidRedShadowTextView
         android:id="@+id/starting_text"
