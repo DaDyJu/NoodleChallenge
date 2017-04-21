@@ -16,15 +16,20 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,6 +58,7 @@ import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibra
 
 public class GameActivity extends AppCompatActivity {
 
+    private final int GAME_TIME_MILLIS = 30000;
     private TextView timer;
     private TextView playerTwoScore;
     private TextView playerThreeScore;
@@ -63,10 +69,17 @@ public class GameActivity extends AppCompatActivity {
     private ImageView chopStickDown;
     private ImageView powerUpsendNoods;
     private ImageView powerUpsendVirate;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer1;
+    private MediaPlayer mediaPlayer2;
+    private MediaPlayer mediaPlayer3;
+
+    private boolean mp1Released = true;
+    private boolean mp2Released = true;
+    private boolean mp3Released = true;
 
     private ViewGroup container;
     private ViewGroup sendNoodsLayout;
+    private TextView gameStartCountdown;
 
     private LinearLayout finishedBowlContainer;
     private BowlImageView finishedBowl;
@@ -120,7 +133,9 @@ public class GameActivity extends AppCompatActivity {
 
         setUpPowerListner();
 
-        mediaPlayer = new MediaPlayer();
+        mediaPlayer1 = new MediaPlayer();
+        mediaPlayer2 = new MediaPlayer();
+        mediaPlayer3 = new MediaPlayer();
 
         mBowlStack = ContextCompat.getDrawable(getApplicationContext(), R.drawable.noods_10);
 
@@ -131,6 +146,8 @@ public class GameActivity extends AppCompatActivity {
         for (int i = 0; i < bowls.length; i++) {
             images.add(ContextCompat.getDrawable(getApplicationContext(), bowls[i]));
         }
+
+        timer.setText("Seconds remaining: " + GAME_TIME_MILLIS / 1000);
 
         sendNoodsLayout = (ViewGroup) findViewById(R.id.send_noods_layout);
         sendNoodsLayout.setVisibility(View.GONE);
@@ -183,19 +200,72 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        new CountDownTimer(30000, 1000) {
+        gameStartCountdown = (TextView) findViewById(R.id.starting_text);
+        gameStartCountdown.setText("4");
+
+        final Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pulse);
+
+        noodleBowl.setClickable(false);
+        // 3 2 1 GO!
+        new CountDownTimer(5000, 1000) {
             public void onTick(long millisUntilFinished) {
-                timer.setText("seconds remaining: " + millisUntilFinished / 1000);
+                String text = gameStartCountdown.getText().toString();
+                noodleBowl.setClickable(false);
+                if (!text.equals("GO!")) {
+                    int count = Integer.parseInt(text);
+                    if (count > 1) {
+                        count--;
+                        gameStartCountdown.setText(Integer.toString(count));
+                    } else {
+                        gameStartCountdown.setText("GO!");
+                    }
+                }
             }
 
+            @Override
             public void onFinish() {
-                EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
-                result.show();
                 noodleBowl.setClickable(false);
+                gameStartCountdown.setVisibility(View.GONE);
+                // start game timer
+                noodleBowl.setClickable(true);
+                new CountDownTimer(GAME_TIME_MILLIS, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        timer.setText(millisUntilFinished / 1000 + "s");
+                    }
+
+                    public void onFinish() {
+                        timer.setText("GAME OVER");
+                        noodleBowl.setClickable(false);
+                        resetMPs();
+                        EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
+                        result.show();
+                    }
+                }.start();
             }
         }.start();
+    }
 
-        //handlePowerup(SendVibrate);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mediaPlayer1 = new MediaPlayer();
+        mediaPlayer2 = new MediaPlayer();
+        mediaPlayer3 = new MediaPlayer();
+    }
+
+    private void resetMPs() {
+        if (mediaPlayer1 != null) {
+            mediaPlayer1.stop();
+            mediaPlayer1.release();
+        }
+        if (mediaPlayer2 != null) {
+            mediaPlayer2.stop();
+            mediaPlayer2.release();
+        }
+        if (mediaPlayer3 != null) {
+            mediaPlayer3.stop();
+            mediaPlayer3.release();
+        }
     }
 
     private void setUpPowerListner() {
@@ -267,11 +337,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void playOiSound() {
-        mediaPlayer.reset();
-
         Random rand = new Random();
         int num = rand.nextInt(3) + 1;
 
+        MediaPlayer mediaPlayer = new MediaPlayer();
         if (num == 1) {
             mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oi_1);
         } else if (num == 2) {
@@ -280,7 +349,57 @@ public class GameActivity extends AppCompatActivity {
             mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oi_3);
         }
 
-        mediaPlayer.start();
+        int mp = 0;
+
+        if (mp1Released) {
+            mediaPlayer1 = mediaPlayer;
+            mp2Released = false;
+            mp = 1;
+        } else if (mp2Released) {
+            mediaPlayer2 = mediaPlayer;
+            mp2Released = false;
+            mp = 2;
+        } else {
+            if (!mp3Released) {
+                mediaPlayer3.stop();
+                mediaPlayer3.release();
+            }
+            mediaPlayer2 = mediaPlayer;
+            mp3Released = false;
+            mp = 3;
+        }
+
+        if (mp == 1) {
+            mediaPlayer1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    mp.release();
+                    mp1Released = true;
+                }
+            });
+            mediaPlayer1.start();
+        } else if (mp == 2) {
+            mediaPlayer2.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    mp.release();
+                    mp2Released = true;
+                }
+            });
+            mediaPlayer2.start();
+        } else {
+            mediaPlayer3.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.stop();
+                    mp.release();
+                    mp3Released = true;
+                }
+            });
+            mediaPlayer3.start();
+        }
     }
 
     private void onSendLag(String playerName) {
@@ -290,6 +409,5 @@ public class GameActivity extends AppCompatActivity {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(100000);
     }
-
 
 }
