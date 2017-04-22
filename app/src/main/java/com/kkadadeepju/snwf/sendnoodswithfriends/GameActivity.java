@@ -57,7 +57,7 @@ import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibra
  */
 
 public class GameActivity extends AppCompatActivity {
-
+    static boolean active = false;
     private final int GAME_TIME_MILLIS = 30000;
     private TextView timer;
     private TextView playerTwoScore;
@@ -168,7 +168,7 @@ public class GameActivity extends AppCompatActivity {
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playOiSound();
+                //playOiSound();
 
                 if (isSendNoodsActive) {
                     return;
@@ -237,12 +237,28 @@ public class GameActivity extends AppCompatActivity {
                         timer.setText("GAME OVER");
                         noodleBowl.setClickable(false);
                         resetMPs();
-                        EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
-                        result.show();
+
+                        if (active) {
+                            EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
+                            result.show();
+                        }
+
                     }
                 }.start();
             }
         }.start();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
     }
 
     @Override
