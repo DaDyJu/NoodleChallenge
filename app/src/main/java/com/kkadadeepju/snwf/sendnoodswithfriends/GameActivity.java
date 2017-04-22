@@ -16,6 +16,8 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,7 +40,16 @@ import android.widget.TextView;
 
 import java.lang.reflect.Array;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.kkadadeepju.snwf.sendnoodswithfriends.adapter.PlayerScoreAdapter;
 import com.kkadadeepju.snwf.sendnoodswithfriends.dialog.EndOfTurnDIalog;
+import com.kkadadeepju.snwf.sendnoodswithfriends.model.GameClass;
+import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import com.plattysoft.leonids.ParticleSystem;
 
@@ -47,6 +58,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_ID;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_USERS;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.SCORE;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.USER_ID;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.*;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendNoods;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibrate;
@@ -57,6 +72,12 @@ import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibra
  */
 
 public class GameActivity extends AppCompatActivity {
+
+    private static final int SEND_NOODLE_POWER_UP = 1;
+    private static final int VIBRATE_POWER_UP = 2;
+
+    private DatabaseReference mDatabase;
+
     static boolean active = false;
     private final int GAME_TIME_MILLIS = 30000;
     private TextView timer;
@@ -69,6 +90,11 @@ public class GameActivity extends AppCompatActivity {
     private ImageView chopStickDown;
     private ImageView powerUpsendNoods;
     private ImageView powerUpsendVirate;
+
+    private RecyclerView playerRvView;
+    private PlayerScoreAdapter adapter;
+
+
     private MediaPlayer mediaPlayer1;
     private MediaPlayer mediaPlayer2;
     private MediaPlayer mediaPlayer3;
@@ -111,6 +137,12 @@ public class GameActivity extends AppCompatActivity {
 
     private ArrayList<Drawable> images = new ArrayList<>();
 
+    private HashMap<String, Integer> userInfoMaps = new HashMap<>();
+    private ArrayList<UserInfo> userInfoArray = new ArrayList<>();
+
+    private String curGameId;
+    private String curUserId;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +163,15 @@ public class GameActivity extends AppCompatActivity {
         powerUpsendNoods = (ImageView) findViewById(R.id.powerup_send_noodle);
         powerUpsendVirate = (ImageView) findViewById(R.id.powerup_send_vibrate);
 
+        playerRvView = (RecyclerView) findViewById(R.id.rvPlayers);
+        adapter = new PlayerScoreAdapter();
+        playerRvView.setAdapter(adapter);
+        playerRvView.setLayoutManager(new LinearLayoutManager(this));
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Games");
+        curGameId = getIntent().getStringExtra(GAME_ID);
+        curUserId = getIntent().getStringExtra(USER_ID);
+        setUpGameEventListener();
         setUpPowerListner();
 
         mediaPlayer1 = new MediaPlayer();
@@ -203,7 +244,6 @@ public class GameActivity extends AppCompatActivity {
         gameStartCountdown = (TextView) findViewById(R.id.starting_text);
         gameStartCountdown.setText("4");
 
-        final Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pulse);
 
         noodleBowl.setClickable(false);
         // 3 2 1 GO!
@@ -230,13 +270,21 @@ public class GameActivity extends AppCompatActivity {
                 noodleBowl.setClickable(true);
                 new CountDownTimer(GAME_TIME_MILLIS, 1000) {
                     public void onTick(long millisUntilFinished) {
-                        timer.setText(millisUntilFinished / 1000 + "s");
+                        long secs = millisUntilFinished / 1000;
+                        if (secs % 5 == 0) {
+                            // update data
+                            Log.v("Junyu", "send Request");
+                            mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
+                        }
+
+                        timer.setText(secs + "s");
                     }
 
                     public void onFinish() {
                         timer.setText("GAME OVER");
                         noodleBowl.setClickable(false);
-                        resetMPs();
+                        //resetMPs();
+                        mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
 
                         if (active) {
                             EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
@@ -247,6 +295,45 @@ public class GameActivity extends AppCompatActivity {
                 }.start();
             }
         }.start();
+    }
+
+    private void setUpGameEventListener() {
+        mDatabase.child(curGameId).child(GAME_USERS).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.v("Junyu", "added " + dataSnapshot.toString());
+                final UserInfo userInfoClass = dataSnapshot.getValue(UserInfo.class);
+                userInfoMaps.put(userInfoClass.userId, userInfoArray.size());
+                userInfoArray.add(userInfoClass);
+                adapter.addData(userInfoClass);
+                adapter.notifyItemInserted(userInfoArray.size());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.v("Junyu", "+++ " + dataSnapshot.toString());
+                final UserInfo userInfoClass = dataSnapshot.getValue(UserInfo.class);
+                int position = userInfoMaps.get(userInfoClass.userId);
+                userInfoArray.get(position).setScore(userInfoClass.getScore());
+                adapter.notifyItemChanged(position);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

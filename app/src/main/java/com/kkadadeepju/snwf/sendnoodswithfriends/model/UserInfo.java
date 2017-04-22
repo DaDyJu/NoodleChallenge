@@ -11,12 +11,6 @@ public class UserInfo {
     }
 
 
-    public UserInfo(String name, int score, int powerUp) {
-        this.name = name;
-        this.score = score;
-        this.powerUp = powerUp;
-    }
-
     public String getName() {
         return name;
     }
@@ -41,7 +35,24 @@ public class UserInfo {
         this.powerUp = powerUp;
     }
 
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public UserInfo(String name, String userId, int score, int powerUp) {
+        this.name = name;
+        this.userId = userId;
+        this.score = score;
+        this.powerUp = powerUp;
+    }
+
     public String name;
+    public String userId;
     public int score;
     public int powerUp;
 
