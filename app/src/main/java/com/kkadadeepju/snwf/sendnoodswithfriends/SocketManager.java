@@ -102,7 +102,7 @@ public class SocketManager {
             System.out.println("session started");
             JSONObject obj = (JSONObject) args[0];
 
-            activity.shutdownLoadingDialog();
+            //activity.showLoadingDialog(true);
             Intent myIntent = new Intent(activity.getApplicationContext(), GameActivity.class);
             activity.startActivity(myIntent);
         }

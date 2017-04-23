@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -48,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int WAITING_TIME = 10;
     SocketManager manager;
+    private boolean isLookingForGame = false;
     private Button findGame;
-    private ProgressBar loadingDialog;
+    private ViewGroup loadingDialogContainer;
     private ArrayList<ImageView> figureImgs = new ArrayList<>();
     private MediaPlayer mediaPlayer;
 
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findGame = (Button) findViewById(R.id.find_game_btn);
-        loadingDialog = (ProgressBar) findViewById(R.id.loadingDialog);
+        loadingDialogContainer = (ViewGroup) findViewById(R.id.loadingDialog_container);
         figureImgs.add((ImageView) findViewById(R.id.figure_one));
         figureImgs.add((ImageView) findViewById(R.id.figure_two));
         figureImgs.add((ImageView) findViewById(R.id.figure_three));
@@ -80,9 +82,10 @@ public class MainActivity extends AppCompatActivity {
         findGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLookingForGame = true;
                 // loop through gamelist to find if there is a existing game, join if there is. create a new one otherwise
                 if (showEnterUserNameDialog()) {
-                    showLoadingDialog();
+                    showLoadingDialog(isLookingForGame);
                     queueGame();
                 }
 
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startMusic();
+        showLoadingDialog(isLookingForGame);
     }
 
     @Override
@@ -122,13 +126,9 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.release();
     }
 
-    public void showLoadingDialog() {
-        loadingDialog.setVisibility(View.VISIBLE);
-        findGame.setVisibility(View.INVISIBLE);
-    }
-
-    public void shutdownLoadingDialog() {
-        //mediaPlayer.stop();
+    public void showLoadingDialog(boolean show) {
+        loadingDialogContainer.setVisibility(show ? View.VISIBLE : View.GONE);
+        findGame.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
     }
 
     private boolean showEnterUserNameDialog() {
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!TextUtils.isEmpty(userGameName)) {
                         NCUserPreference.setUserGameName(MainActivity.this, userGameName);
                     }
-                    showLoadingDialog();
+                    showLoadingDialog(isLookingForGame);
                     queueGame();
                 }
             });
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startGame(String gameId, String userId) {
-        shutdownLoadingDialog();
+        isLookingForGame = false;
         Intent myIntent = new Intent(this, GameActivity.class);
         myIntent.putExtra(GAME_ID, gameId);
         myIntent.putExtra(USER_ID, userId);

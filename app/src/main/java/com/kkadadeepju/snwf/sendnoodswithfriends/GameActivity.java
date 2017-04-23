@@ -226,7 +226,7 @@ public class GameActivity extends AppCompatActivity {
                     imgPosition = 0;
                 }
 
-                if (score % images.size() == 0) {
+                if (score % 10 == 0) {
                     finishedBowl = new BowlImageView(GameActivity.this);
                     finishedBowl.setImageDrawable(mBowlStack);
 
@@ -389,32 +389,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        resetMPs();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         mediaPlayer1 = new MediaPlayer();
         mediaPlayer2 = new MediaPlayer();
         mediaPlayer3 = new MediaPlayer();
-    }
-
-    private void resetMPs() {
-        if (mediaPlayer1 != null) {
-            mediaPlayer1.reset();
-            mediaPlayer1.release();
-        }
-        if (mediaPlayer2 != null) {
-            mediaPlayer2.reset();
-            mediaPlayer2.release();
-        }
-        if (mediaPlayer3 != null) {
-            mediaPlayer3.reset();
-            mediaPlayer3.release();
-        }
     }
 
     private void setUpPowerListner() {
