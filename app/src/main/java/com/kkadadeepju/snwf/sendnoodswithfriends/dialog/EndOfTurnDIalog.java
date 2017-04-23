@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -20,18 +19,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kkadadeepju.snwf.sendnoodswithfriends.GameActivity;
 import com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity;
 import com.kkadadeepju.snwf.sendnoodswithfriends.NCUserPreference;
 import com.kkadadeepju.snwf.sendnoodswithfriends.R;
 import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
-import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlResultImageView;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlStackLayout;
 
-import org.w3c.dom.Text;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_USERS;
 
 /**
@@ -50,17 +44,17 @@ public class EndOfTurnDIalog extends Dialog {
 
 
     private Context context;
-    private int playerBowls;
+    private int playerTaps;
     private String curGameId;
 
     private DatabaseReference mDatabase;
 
-    public EndOfTurnDIalog(final Context context, final int playerBowls, final String gameId) {
+    public EndOfTurnDIalog(final Context context, final int playerTaps, final String gameId) {
         super(context, R.style.Theme_Dialog_Fullscreen_Darkened);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.end_of_turn_dialog);
         this.context = context;
-        this.playerBowls = playerBowls;
+        this.playerTaps = playerTaps;
         curGameId = gameId;
 
         playerOneBowlContainer = (LinearLayout) findViewById(R.id.player_one_score);
@@ -78,13 +72,13 @@ public class EndOfTurnDIalog extends Dialog {
             }
         });
 
-        if (playerBowls / 10 > 20) {
+        if (playerTaps / 10 > 20) {
             userWinLose.setText("You Win!");
         } else {
             userWinLose.setText("Try Harder Text Time!");
         }
 
-        playerOneScore.setText(String.format("Player 1 \n %s", Integer.toString(playerBowls)));
+        playerOneScore.setText(String.format("Player 1 \n %s", Integer.toString(playerTaps)));
         setUpAnimation();
     }
 
@@ -95,7 +89,7 @@ public class EndOfTurnDIalog extends Dialog {
         bowlStackLayout.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -30, context.getResources().getDisplayMetrics());
         mBowlStack = ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.noods_10);
 
-        for (int i = 0; i < playerBowls / 10; i++) {
+        for (int i = 0; i <= playerTaps / 10; i++) {
             resultBowl = new BowlResultImageView(getContext());
             resultBowl.setImageDrawable(mBowlStack);
 

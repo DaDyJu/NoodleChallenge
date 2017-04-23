@@ -70,10 +70,9 @@ public class MainActivity extends AppCompatActivity {
         figureImgs.add((ImageView) findViewById(R.id.figure_six));
         final Animation shake = AnimationUtils.loadAnimation(this, R.anim.toggle);
 
-//        for (ImageView img : figureImgs) {
-//            img.startAnimation(shake);
-//        }
-
+        for (ImageView img : figureImgs) {
+            img.startAnimation(shake);
+        }
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Games");
 
@@ -92,13 +91,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startMusic();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopMusic();
+    }
 
     private void startMusic() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
-
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.theme_music);
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -110,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
 
         });
         mediaPlayer.start();
+    }
+
+    private void stopMusic() {
+        mediaPlayer.stop();
+        mediaPlayer.release();
     }
 
     public void showLoadingDialog() {

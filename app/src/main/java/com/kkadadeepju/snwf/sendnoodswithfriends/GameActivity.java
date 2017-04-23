@@ -83,7 +83,7 @@ public class GameActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     static boolean active = false;
-    private final int GAME_TIME_MILLIS = 5000;
+    private final int GAME_TIME_MILLIS = 30000;
     private TextView timer;
     private TextView playerTwoScore;
     private TextView playerThreeScore;
@@ -213,7 +213,7 @@ public class GameActivity extends AppCompatActivity {
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //playOiSound();
+                playOiSound();
 
                 if (isSendNoodsActive) {
                     return;
@@ -224,12 +224,16 @@ public class GameActivity extends AppCompatActivity {
 
                 if (imgPosition == 9) {
                     imgPosition = 0;
+                }
+
+                if (score % images.size() == 0) {
                     finishedBowl = new BowlImageView(GameActivity.this);
                     finishedBowl.setImageDrawable(mBowlStack);
 
                     finishedBowl.setLayoutParams(bowlStackLayout);
                     finishedBowlContainer.addView(finishedBowl, 0);
                 }
+
                 noodleBowl.setImageDrawable(images.get(imgPosition));
                 imgPosition++;
 
@@ -268,7 +272,6 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                noodleBowl.setClickable(false);
                 gameStartCountdown.setVisibility(View.GONE);
                 // start game timer
                 noodleBowl.setClickable(true);
@@ -383,6 +386,12 @@ public class GameActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         active = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        resetMPs();
     }
 
     @Override
