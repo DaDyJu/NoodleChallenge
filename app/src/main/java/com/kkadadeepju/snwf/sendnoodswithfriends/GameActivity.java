@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.os.Vibrator;
 import android.support.annotation.DrawableRes;
@@ -290,8 +291,11 @@ public class GameActivity extends AppCompatActivity {
                         mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
 
                         if (active) {
-                            EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score, curGameId);
+                            final EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score, curGameId);
+
                             result.show();
+
+
                         }
 
                     }
@@ -304,7 +308,6 @@ public class GameActivity extends AppCompatActivity {
         mDatabase.child(curGameId).child(GAME_USERS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.v("Junyu", "added " + dataSnapshot.toString());
                 final UserInfo userInfoClass = dataSnapshot.getValue(UserInfo.class);
                 userInfoMaps.put(userInfoClass.userId, userInfoArray.size());
                 userInfoArray.add(userInfoClass);

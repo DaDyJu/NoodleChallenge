@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String GAME_POWER_UPS = "gamePowerUps";
     public static final String SCORE = "score";
 
-    public static final int WAITING_TIME = 6;
+    public static final int WAITING_TIME = 10;
     SocketManager manager;
     private Button findGame;
     private ProgressBar loadingDialog;
