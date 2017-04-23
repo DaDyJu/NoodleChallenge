@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String GAME_ID = "gameId";
     public static final String USER_ID = "userId";
     public static final String GAME_USERS = "gameUsers";
+    public static final String GAME_POWER_UPS = "gamePowerUps";
     public static final String SCORE = "score";
 
     public static final int WAITING_TIME = 6;
@@ -158,8 +159,9 @@ public class MainActivity extends AppCompatActivity {
 
                     final GameClass gameClass = snapshot.getValue(GameClass.class);
                     if (gameClass.gameWaiting > 0) {
-                        // join the game
+                        // join existing game
                         final String tempUserId = mDatabase.child(gameClass.gameId).child(GAME_USERS).push().getKey();
+                        NCUserPreference.setUserGameId(MainActivity.this, tempUserId);
                         mDatabase.child(gameClass.gameId).child(GAME_USERS).child(tempUserId).setValue(new UserInfo(NCUserPreference.getUserGameName(MainActivity.this), tempUserId, 0, -1));
                         mDatabase.child(gameClass.gameId).child(IS_GAME_STARTED).addValueEventListener(new ValueEventListener() {
                             @Override
@@ -188,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mDatabase.child(gameId).setValue(gameInfo);
                 final String userId = mDatabase.child(gameId).child(GAME_USERS).push().getKey();
+                NCUserPreference.setUserGameId(MainActivity.this, userId);
 
                 //user Info
                 mDatabase.child(gameId).child(GAME_USERS).child(userId).setValue(new UserInfo(NCUserPreference.getUserGameName(MainActivity.this), userId, 0, -1));

@@ -49,6 +49,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.kkadadeepju.snwf.sendnoodswithfriends.adapter.PlayerScoreAdapter;
 import com.kkadadeepju.snwf.sendnoodswithfriends.dialog.EndOfTurnDIalog;
 import com.kkadadeepju.snwf.sendnoodswithfriends.model.GameClass;
+import com.kkadadeepju.snwf.sendnoodswithfriends.model.PowerUp;
 import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import com.plattysoft.leonids.ParticleSystem;
@@ -59,10 +60,12 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_ID;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_POWER_UPS;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_USERS;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.SCORE;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.USER_ID;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.*;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendLag;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendNoods;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibrate;
 
@@ -74,12 +77,12 @@ import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibra
 public class GameActivity extends AppCompatActivity {
 
     private static final int SEND_NOODLE_POWER_UP = 1;
-    private static final int VIBRATE_POWER_UP = 2;
+    private static final int SEND_VIBRATE_POWER_UP = 2;
 
     private DatabaseReference mDatabase;
 
     static boolean active = false;
-    private final int GAME_TIME_MILLIS = 30000;
+    private final int GAME_TIME_MILLIS = 5000;
     private TextView timer;
     private TextView playerTwoScore;
     private TextView playerThreeScore;
@@ -287,7 +290,7 @@ public class GameActivity extends AppCompatActivity {
                         mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
 
                         if (active) {
-                            EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score);
+                            EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score, curGameId);
                             result.show();
                         }
 
@@ -316,6 +319,37 @@ public class GameActivity extends AppCompatActivity {
                 int position = userInfoMaps.get(userInfoClass.userId);
                 userInfoArray.get(position).setScore(userInfoClass.getScore());
                 adapter.notifyItemChanged(position);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.child(curGameId).child(GAME_POWER_UPS).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                PowerUp powerUp = dataSnapshot.getValue(PowerUp.class);
+                if (!powerUp.userId.equals(NCUserPreference.getUserId(GameActivity.this))) {
+                    // not ur own power up
+                    handlePowerup(powerUp.powerUpType);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
             }
 
@@ -379,7 +413,7 @@ public class GameActivity extends AppCompatActivity {
                         .setSpeedRange(0.2f, 0.3f)
                         .oneShot(powerUpsendNoods, 100);
                 powerUpsendNoods.setAlpha(127);
-                onSendNoods("");
+                sendPowerUp(SEND_NOODLE_POWER_UP);
                 powerUpsendNoods.setClickable(false);
             }
         });
@@ -390,30 +424,31 @@ public class GameActivity extends AppCompatActivity {
                 new ParticleSystem(GameActivity.this, 100, R.drawable.vibrate_particle, 1000)
                         .setSpeedRange(0.2f, 0.3f)
                         .oneShot(powerUpsendVirate, 100);
-                onSendVibrate("");
                 powerUpsendVirate.setAlpha(127);
+                sendPowerUp(SEND_VIBRATE_POWER_UP);
                 powerUpsendVirate.setClickable(false);
             }
         });
     }
 
-    public void handlePowerup(Types type) {
+    private void sendPowerUp(int type) {
+        mDatabase.child(curGameId).child(GAME_POWER_UPS).push().setValue(new PowerUp(NCUserPreference.getUserId(GameActivity.this), type));
+    }
+
+    public void handlePowerup(int type) {
         switch (type) {
-            case SendNoods:
-                onSendNoods("Dadyju");
+            case SEND_NOODLE_POWER_UP:
+                onReceiveNoods("Dadyju");
                 break;
-            case SendLag:
-                onSendLag("Dadyju");
-                break;
-            case SendVibrate:
-                onSendVibrate("Dadyju");
+            case SEND_VIBRATE_POWER_UP:
+                onReceiveVibrate("Dadyju");
                 break;
             default:
                 break;
         }
     }
 
-    private void onSendNoods(String playerName) {
+    private void onReceiveNoods(String playerName) {
         // received a bunch of noods from playerName
         // fills up their whole screen with noodles, their score does not count until their extra noodles are gone
         // and they are back to tapping on their regular noodle bowl
@@ -510,9 +545,9 @@ public class GameActivity extends AppCompatActivity {
     private void onSendLag(String playerName) {
     }
 
-    private void onSendVibrate(String playerName) {
+    private void onReceiveVibrate(String playerName) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(100000);
+        v.vibrate(10000);
     }
 
 }

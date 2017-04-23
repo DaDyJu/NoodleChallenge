@@ -15,13 +15,24 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.kkadadeepju.snwf.sendnoodswithfriends.GameActivity;
 import com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity;
+import com.kkadadeepju.snwf.sendnoodswithfriends.NCUserPreference;
 import com.kkadadeepju.snwf.sendnoodswithfriends.R;
+import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlResultImageView;
+import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlStackLayout;
 
 import org.w3c.dom.Text;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_USERS;
 
 /**
  * Created by jzhou on 2017-04-21.
@@ -30,9 +41,7 @@ import org.w3c.dom.Text;
 public class EndOfTurnDIalog extends Dialog {
 
     private LinearLayout playerOneBowlContainer;
-    private LinearLayout playerTwoBowlContainer;
-    private LinearLayout playerThreeBowlContainer;
-    private LinearLayout playerFourBowlContainer;
+    private LinearLayout playerBowlContainer;
     private TextView userWinLose;
     private TextView playerOneScore;
     private BowlResultImageView resultBowl;
@@ -42,17 +51,20 @@ public class EndOfTurnDIalog extends Dialog {
 
     private Context context;
     private int playerBowls;
+    private String curGameId;
 
-    public EndOfTurnDIalog(final Context context, final int playerBowls) {
+    private DatabaseReference mDatabase;
+
+    public EndOfTurnDIalog(final Context context, final int playerBowls, final String gameId) {
         super(context, R.style.Theme_Dialog_Fullscreen_Darkened);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.end_of_turn_dialog);
         this.context = context;
         this.playerBowls = playerBowls;
+        curGameId = gameId;
+
         playerOneBowlContainer = (LinearLayout) findViewById(R.id.player_one_score);
-        playerTwoBowlContainer = (LinearLayout) findViewById(R.id.player_two_score);
-        playerThreeBowlContainer = (LinearLayout) findViewById(R.id.player_three_score);
-        playerFourBowlContainer = (LinearLayout) findViewById(R.id.player_four_score);
+        playerBowlContainer = (LinearLayout) findViewById(R.id.player_bowl_container);
         userWinLose = (TextView) findViewById(R.id.userWinLose);
         playerOneScore = (TextView) findViewById(R.id.player_one_bowls);
         rematchBtn = (Button) findViewById(R.id.rematch_bth);
@@ -91,29 +103,36 @@ public class EndOfTurnDIalog extends Dialog {
             playerOneBowlContainer.addView(resultBowl, 0);
         }
 
-        for (int i = 0; i < 7; i++) {
-            resultBowl = new BowlResultImageView(getContext());
-            resultBowl.setImageDrawable(mBowlStack);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Games").child(curGameId).child(GAME_USERS);
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserInfo userInfo = snapshot.getValue(UserInfo.class);
 
-            resultBowl.setLayoutParams(bowlStackLayout);
-            playerTwoBowlContainer.addView(resultBowl, 0);
-        }
+                    if (userInfo.getUserId().equals(NCUserPreference.getUserId(getContext()))) {
+                        continue;
+                    }
 
-        for (int i = 0; i < 20; i++) {
-            resultBowl = new BowlResultImageView(getContext());
-            resultBowl.setImageDrawable(mBowlStack);
+                    BowlStackLayout bowlStackLayoutContainer = new BowlStackLayout(getContext());
 
-            resultBowl.setLayoutParams(bowlStackLayout);
-            playerThreeBowlContainer.addView(resultBowl, 0);
-        }
+                    for (int i = 0; i < userInfo.getScore() / 10; i++) {
+                        resultBowl = new BowlResultImageView(getContext());
+                        resultBowl.setImageDrawable(mBowlStack);
+                        resultBowl.setLayoutParams(bowlStackLayout);
+                        bowlStackLayoutContainer.addView(resultBowl, 0);
+                    }
 
-        for (int i = 0; i < 9; i++) {
-            resultBowl = new BowlResultImageView(getContext());
-            resultBowl.setImageDrawable(mBowlStack);
+                    playerBowlContainer.addView(bowlStackLayoutContainer);
+                }
+            }
 
-            resultBowl.setLayoutParams(bowlStackLayout);
-            playerFourBowlContainer.addView(resultBowl, 0);
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override

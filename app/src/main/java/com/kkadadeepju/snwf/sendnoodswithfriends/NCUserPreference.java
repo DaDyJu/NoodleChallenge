@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.PREFERENCE_NAME;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.USER_GAME_ID;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.USER_GAME_NAME;
 
 /**
@@ -25,6 +26,16 @@ public class NCUserPreference {
     public static Boolean isUserNameSet(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, context.MODE_PRIVATE);
         return sharedPreferences.contains(USER_GAME_NAME);
+    }
+
+    public static String getUserId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, context.MODE_PRIVATE);
+        return sharedPreferences.getString(USER_GAME_ID, null);
+    }
+
+    public static void setUserGameId(Context context, String name) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(USER_GAME_ID, name).apply();
     }
 
 }
