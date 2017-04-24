@@ -1,45 +1,27 @@
 package com.kkadadeepju.snwf.sendnoodswithfriends;
 
-import android.animation.Animator;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.PersistableBundle;
 import android.os.Vibrator;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import java.lang.reflect.Array;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -49,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kkadadeepju.snwf.sendnoodswithfriends.adapter.PlayerScoreAdapter;
 import com.kkadadeepju.snwf.sendnoodswithfriends.dialog.EndOfTurnDIalog;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.GameClass;
+import com.kkadadeepju.snwf.sendnoodswithfriends.model.GameState;
 import com.kkadadeepju.snwf.sendnoodswithfriends.model.PowerUp;
 import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
@@ -60,15 +42,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_ID;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_POWER_UPS;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_USERS;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAMES;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_POWER_UPS;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_STATES;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_ID;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.IS_GAME_STARTED;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.TIME_WAITING;
 import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.SCORE;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.USER_ID;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.*;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendLag;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendNoods;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Powerups.Types.SendVibrate;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.USER_ID;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.WAITING_TIME;
 
 
 /**
@@ -83,7 +66,7 @@ public class GameActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     static boolean active = false;
-    private final int GAME_TIME_MILLIS = 30000;
+    private final int GAME_TIME_MILLIS = 15000;
     private TextView timer;
     private TextView playerTwoScore;
     private TextView playerThreeScore;
@@ -172,9 +155,10 @@ public class GameActivity extends AppCompatActivity {
         playerRvView.setAdapter(adapter);
         playerRvView.setLayoutManager(new LinearLayoutManager(this));
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Games");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(GAMES);
         curGameId = getIntent().getStringExtra(GAME_ID);
         curUserId = getIntent().getStringExtra(USER_ID);
+        registerGameStartState();
         setUpGameEventListener();
         setUpPowerListner();
 
@@ -213,7 +197,7 @@ public class GameActivity extends AppCompatActivity {
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playOiSound();
+                //playOiSound();
 
                 if (isSendNoodsActive) {
                     return;
@@ -288,23 +272,52 @@ public class GameActivity extends AppCompatActivity {
                     }
 
                     public void onFinish() {
-                        timer.setText("GAME OVER");
-                        noodleBowl.setClickable(false);
-                        //resetMPs();
-                        mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
-
-                        if (active) {
-                            final EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score, curGameId);
-
-                            result.show();
-
-
-                        }
-
+                        onGameFinish();
                     }
                 }.start();
             }
         }.start();
+    }
+
+    private void onGameFinish() {
+        timer.setText("GAMES OVER");
+        noodleBowl.setClickable(false);
+        //resetMPs();
+        mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
+        mDatabase.child(curGameId).child(GAME_STATES).child(curUserId).setValue(new GameState(true, score, NCUserPreference.getUserGameName(GameActivity.this)));
+
+        showResultDialog();
+    }
+
+    private void showResultDialog() {
+
+        mDatabase.child(curGameId).child(GAME_STATES).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    GameState gameState = snapshot.getValue(GameState.class);
+                    if (!gameState.isGameOver) {
+                        return;
+                    }
+                }
+
+                if (active) {
+                    final EndOfTurnDIalog result = new EndOfTurnDIalog(GameActivity.this, score, curGameId);
+                    result.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void registerGameStartState() {
+        mDatabase.child(curGameId).child(GAME_STATES).child(curUserId).setValue(new GameState(false, -1, NCUserPreference.getUserGameName(GameActivity.this)));
     }
 
     private void setUpGameEventListener() {
@@ -320,7 +333,6 @@ public class GameActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.v("Junyu", "+++ " + dataSnapshot.toString());
                 final UserInfo userInfoClass = dataSnapshot.getValue(UserInfo.class);
                 int position = userInfoMaps.get(userInfoClass.userId);
                 userInfoArray.get(position).setScore(userInfoClass.getScore());
@@ -538,7 +550,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void onReceiveVibrate(String playerName) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(10000);
+        v.vibrate(5000);
     }
 
 }

@@ -4,13 +4,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -18,8 +15,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,21 +28,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
-
-import static android.R.attr.key;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAMES;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_ID;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.IS_GAME_STARTED;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.TIME_WAITING;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.USER_ID;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TIME_WAITING = "gameWaiting";
-    public static final String IS_GAME_STARTED = "isGameStarted";
-    public static final String GAME_ID = "gameId";
-    public static final String USER_ID = "userId";
-    public static final String GAME_USERS = "gameUsers";
-    public static final String GAME_POWER_UPS = "gamePowerUps";
     public static final String SCORE = "score";
 
-    public static final int WAITING_TIME = 10;
+    public static final int WAITING_TIME = 6;
     SocketManager manager;
     private boolean isLookingForGame = false;
     private Button findGame;
@@ -76,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             img.startAnimation(shake);
         }
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Games");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(GAMES);
 
 
         findGame.setOnClickListener(new View.OnClickListener() {
@@ -97,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startMusic();
+        //startMusic();
         showLoadingDialog(isLookingForGame);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stopMusic();
+        //stopMusic();
     }
 
     private void startMusic() {

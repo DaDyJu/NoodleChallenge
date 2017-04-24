@@ -3,6 +3,7 @@ package com.kkadadeepju.snwf.sendnoodswithfriends.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -25,8 +26,13 @@ import com.kkadadeepju.snwf.sendnoodswithfriends.R;
 import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlResultImageView;
 import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlStackLayout;
+import com.kkadadeepju.snwf.sendnoodswithfriends.widget.PlayerScoreTextView;
 
-import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.GAME_USERS;
+import java.util.ArrayList;
+
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAMES;
+import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_USERS;
+
 
 /**
  * Created by jzhou on 2017-04-21.
@@ -36,6 +42,7 @@ public class EndOfTurnDIalog extends Dialog {
 
     private LinearLayout playerOneBowlContainer;
     private LinearLayout playerBowlContainer;
+    private LinearLayout playerScoreName;
     private TextView userWinLose;
     private TextView playerOneScore;
     private BowlResultImageView resultBowl;
@@ -47,6 +54,10 @@ public class EndOfTurnDIalog extends Dialog {
     private int playerTaps;
     private String curGameId;
 
+    private int curBest = 0;
+
+    private ArrayList<Integer> finalScores = new ArrayList<>();
+
     private DatabaseReference mDatabase;
 
     public EndOfTurnDIalog(final Context context, final int playerTaps, final String gameId) {
@@ -57,8 +68,11 @@ public class EndOfTurnDIalog extends Dialog {
         this.playerTaps = playerTaps;
         curGameId = gameId;
 
+
         playerOneBowlContainer = (LinearLayout) findViewById(R.id.player_one_score);
         playerBowlContainer = (LinearLayout) findViewById(R.id.player_bowl_container);
+        playerScoreName = (LinearLayout) findViewById(R.id.player_total_score);
+
         userWinLose = (TextView) findViewById(R.id.userWinLose);
         playerOneScore = (TextView) findViewById(R.id.player_one_bowls);
         rematchBtn = (Button) findViewById(R.id.rematch_bth);
@@ -72,13 +86,7 @@ public class EndOfTurnDIalog extends Dialog {
             }
         });
 
-        if (playerTaps / 10 > 20) {
-            userWinLose.setText("You Win!");
-        } else {
-            userWinLose.setText("Try Harder Text Time!");
-        }
-
-        playerOneScore.setText(String.format("Player 1 \n %s", Integer.toString(playerTaps)));
+        playerOneScore.setText(NCUserPreference.getUserGameName(getContext()) + "\n" + playerTaps);
         setUpAnimation();
     }
 
@@ -89,7 +97,8 @@ public class EndOfTurnDIalog extends Dialog {
         bowlStackLayout.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -30, context.getResources().getDisplayMetrics());
         mBowlStack = ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.noods_10);
 
-        for (int i = 0; i <= playerTaps / 10; i++) {
+        int bowls = playerTaps / 10;
+        for (int i = 0; i < bowls; i++) {
             resultBowl = new BowlResultImageView(getContext());
             resultBowl.setImageDrawable(mBowlStack);
 
@@ -97,7 +106,7 @@ public class EndOfTurnDIalog extends Dialog {
             playerOneBowlContainer.addView(resultBowl, 0);
         }
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Games").child(curGameId).child(GAME_USERS);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(GAMES).child(curGameId).child(GAME_USERS);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -118,6 +127,18 @@ public class EndOfTurnDIalog extends Dialog {
                     }
 
                     playerBowlContainer.addView(bowlStackLayoutContainer);
+
+                    playerScoreName.addView(new PlayerScoreTextView(getContext(), userInfo.getName(), userInfo.getScore()));
+
+                    if (userInfo.getScore() > curBest) {
+                        curBest = userInfo.getScore();
+                    }
+                }
+
+                if (playerTaps > curBest) {
+                    userWinLose.setText("You Win!");
+                } else {
+                    userWinLose.setText("Try Harder Text Time!");
                 }
             }
 
