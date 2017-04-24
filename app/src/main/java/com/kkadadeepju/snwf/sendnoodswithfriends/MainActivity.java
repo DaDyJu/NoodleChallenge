@@ -123,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
         findGame.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
     }
 
+    private void hideLoadingDialog() {
+        loadingDialogContainer.setVisibility(View.GONE);
+    }
+
     private boolean showEnterUserNameDialog() {
         if (!NCUserPreference.isUserNameSet(this)) {
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -222,6 +226,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void startGame(String gameId, String userId) {
         isLookingForGame = false;
+        hideLoadingDialog();
+
         Intent myIntent = new Intent(this, GameActivity.class);
         myIntent.putExtra(GAME_ID, gameId);
         myIntent.putExtra(USER_ID, userId);

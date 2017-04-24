@@ -68,9 +68,6 @@ public class GameActivity extends AppCompatActivity {
     static boolean active = false;
     private final int GAME_TIME_MILLIS = 15000;
     private TextView timer;
-    private TextView playerTwoScore;
-    private TextView playerThreeScore;
-    private TextView playerFourScore;
     private TextView playerScore;
     private ImageView noodleBowl;
     private ImageView chopStickUp;
@@ -90,7 +87,6 @@ public class GameActivity extends AppCompatActivity {
     private boolean mp2Released = true;
     private boolean mp3Released = true;
 
-    private ViewGroup container;
     private ViewGroup sendNoodsLayout;
     private TextView gameStartCountdown;
 
@@ -137,11 +133,8 @@ public class GameActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.game_activity);
-        container = (ViewGroup) findViewById(R.id.container);
+
         timer = (TextView) findViewById(R.id.timer);
-        playerTwoScore = (TextView) findViewById(R.id.player_two_score);
-        playerThreeScore = (TextView) findViewById(R.id.player_three_score);
-        playerFourScore = (TextView) findViewById(R.id.player_four_score);
         playerScore = (TextView) findViewById(R.id.player_score);
 
         chopStickUp = (ImageView) findViewById(R.id.chopstick_up);
@@ -233,9 +226,6 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        gameStartCountdown = (TextView) findViewById(R.id.starting_text);
-        gameStartCountdown.setText("4");
-
 
         noodleBowl.setClickable(false);
         // 3 2 1 GO!
@@ -264,7 +254,6 @@ public class GameActivity extends AppCompatActivity {
                         long secs = millisUntilFinished / 1000;
                         if (secs % 5 == 0) {
                             // update data
-                            Log.v("Junyu", "send Request");
                             mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
                         }
 
@@ -277,10 +266,10 @@ public class GameActivity extends AppCompatActivity {
                 }.start();
             }
         }.start();
+
     }
 
     private void onGameFinish() {
-        timer.setText("GAMES OVER");
         noodleBowl.setClickable(false);
         //resetMPs();
         mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
