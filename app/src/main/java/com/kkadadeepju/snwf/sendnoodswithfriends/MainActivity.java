@@ -227,10 +227,16 @@ public class MainActivity extends AppCompatActivity {
     private void startGame(String gameId, String userId) {
         isLookingForGame = false;
         hideLoadingDialog();
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+        builder1.setMessage("Loading game...");
+        builder1.setCancelable(false);
+        builder1.show();
+
 
         Intent myIntent = new Intent(this, GameActivity.class);
         myIntent.putExtra(GAME_ID, gameId);
         myIntent.putExtra(USER_ID, userId);
         startActivity(myIntent);
+        finish();
     }
 }

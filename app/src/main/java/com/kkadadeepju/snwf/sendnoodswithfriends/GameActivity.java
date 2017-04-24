@@ -226,6 +226,9 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        gameStartCountdown = (TextView) findViewById(R.id.starting_text);
+        gameStartCountdown.setText("4");
+
 
         noodleBowl.setClickable(false);
         // 3 2 1 GO!
@@ -276,6 +279,12 @@ public class GameActivity extends AppCompatActivity {
         mDatabase.child(curGameId).child(GAME_STATES).child(curUserId).setValue(new GameState(true, score, NCUserPreference.getUserGameName(GameActivity.this)));
 
         showResultDialog();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // TODO add comfirmation dialog
     }
 
     private void showResultDialog() {
