@@ -67,6 +67,8 @@ public class EndOfTurnDIalog extends Dialog {
         this.playerTaps = playerTaps;
         curGameId = gameId;
 
+        setCanceledOnTouchOutside(false);
+
 
         playerOneBowlContainer = (LinearLayout) findViewById(R.id.player_one_score);
         playerBowlContainer = (LinearLayout) findViewById(R.id.player_bowl_container);
