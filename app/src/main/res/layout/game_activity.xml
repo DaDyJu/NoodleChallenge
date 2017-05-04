@@ -131,7 +131,7 @@
         layout="@layout/send_noods"
         android:visibility="gone" />
 
-    <com.kkadadeepju.snwf.sendnoodswithfriends.widget.SolidRedShadowTextView
+    <com.kkadadeepju.snwf.sendnoods.widget.SolidRedShadowTextView
         android:id="@+id/starting_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

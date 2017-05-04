@@ -1,8 +1,6 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends;
+package com.kkadadeepju.snwf.sendnoods;
 
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,8 +10,6 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**

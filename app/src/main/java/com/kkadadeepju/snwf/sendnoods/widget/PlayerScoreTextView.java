@@ -1,11 +1,10 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends.widget;
+package com.kkadadeepju.snwf.sendnoods.widget;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.Gravity;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 /**
  * Created by Junyu on 2017-04-24.

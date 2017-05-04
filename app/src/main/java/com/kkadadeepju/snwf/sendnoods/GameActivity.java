@@ -1,6 +1,8 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends;
+package com.kkadadeepju.snwf.sendnoods;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -8,10 +10,10 @@ import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
@@ -29,29 +31,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kkadadeepju.snwf.sendnoodswithfriends.adapter.PlayerScoreAdapter;
-import com.kkadadeepju.snwf.sendnoodswithfriends.dialog.EndOfTurnDIalog;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.GameState;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.PowerUp;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
-import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlImageView;
+import com.kkadadeepju.snwf.sendnoods.adapter.PlayerScoreAdapter;
+import com.kkadadeepju.snwf.sendnoods.dialog.EndOfTurnDIalog;
+import com.kkadadeepju.snwf.sendnoods.model.GameState;
+import com.kkadadeepju.snwf.sendnoods.model.PowerUp;
+import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
+import com.kkadadeepju.snwf.sendnoods.widget.BowlImageView;
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAMES;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_POWER_UPS;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_STATES;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_USERS;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_ID;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.IS_GAME_STARTED;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.TIME_WAITING;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.SCORE;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.USER_ID;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity.WAITING_TIME;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAMES;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_POWER_UPS;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_STATES;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_ID;
+import static com.kkadadeepju.snwf.sendnoods.MainActivity.SCORE;
+import static com.kkadadeepju.snwf.sendnoods.Constants.USER_ID;
 
 
 /**
@@ -66,7 +64,7 @@ public class GameActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     static boolean active = false;
-    private final int GAME_TIME_MILLIS = 15000;
+    private final int GAME_TIME_MILLIS = 20000;
     private TextView timer;
     private TextView playerScore;
     private ImageView noodleBowl;
@@ -283,8 +281,23 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        // TODO add comfirmation dialog
+//        new AlertDialog.Builder(this)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setTitle("Closing Game")
+//                .setMessage("Are you sure you want to close current game?")
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+////                        finish();
+//                        onGameFinish();
+////                        Intent myIntent = new Intent(GameActivity.this, MainActivity.class);
+////                        startActivity(myIntent);
+//                    }
+//
+//                })
+//                .setNegativeButton("No", null)
+//                .show();
+        return;
     }
 
     private void showResultDialog() {
@@ -548,7 +561,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void onReceiveVibrate(String playerName) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(5000);
+        v.vibrate(8000);
     }
 
 }

@@ -1,9 +1,8 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends.widget;
+package com.kkadadeepju.snwf.sendnoods.widget;
 
 import android.content.Context;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.ImageView;
 
 /**
  * Created by jzhou on 2017-04-21.

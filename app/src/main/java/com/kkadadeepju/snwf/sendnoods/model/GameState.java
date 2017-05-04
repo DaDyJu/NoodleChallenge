@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends.model;
+package com.kkadadeepju.snwf.sendnoods.model;
 
 /**
  * Created by Junyu on 2017-04-24.

@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends;
+package com.kkadadeepju.snwf.sendnoods;
 
 import org.junit.Test;
 

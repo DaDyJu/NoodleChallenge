@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends;
+package com.kkadadeepju.snwf.sendnoods;
 
 /**
  * Created by ykim on 2017-04-20.

@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends;
+package com.kkadadeepju.snwf.sendnoods;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,19 +21,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.GameClass;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
+import com.kkadadeepju.snwf.sendnoods.model.GameClass;
+import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAMES;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_ID;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_USERS;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.IS_GAME_STARTED;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.TIME_WAITING;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.USER_ID;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAMES;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_ID;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.sendnoods.Constants.IS_GAME_STARTED;
+import static com.kkadadeepju.snwf.sendnoods.Constants.TIME_WAITING;
+import static com.kkadadeepju.snwf.sendnoods.Constants.USER_ID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -131,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
         if (!NCUserPreference.isUserNameSet(this)) {
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
             final EditText edittext = new EditText(this);
-            alert.setMessage("Enter Your Name");
-            alert.setTitle("Enter Your Title");
+            alert.setTitle("Enter Your Name");
 
             alert.setView(edittext);
 

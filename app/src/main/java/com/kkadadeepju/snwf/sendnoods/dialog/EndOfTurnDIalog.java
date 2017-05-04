@@ -1,9 +1,8 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends.dialog;
+package com.kkadadeepju.snwf.sendnoods.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -20,18 +19,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kkadadeepju.snwf.sendnoodswithfriends.MainActivity;
-import com.kkadadeepju.snwf.sendnoodswithfriends.NCUserPreference;
-import com.kkadadeepju.snwf.sendnoodswithfriends.R;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
-import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlResultImageView;
-import com.kkadadeepju.snwf.sendnoodswithfriends.widget.BowlStackLayout;
-import com.kkadadeepju.snwf.sendnoodswithfriends.widget.PlayerScoreTextView;
+import com.kkadadeepju.snwf.sendnoods.MainActivity;
+import com.kkadadeepju.snwf.sendnoods.NCUserPreference;
+import com.kkadadeepju.snwf.sendnoods.R;
+import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
+import com.kkadadeepju.snwf.sendnoods.widget.BowlResultImageView;
+import com.kkadadeepju.snwf.sendnoods.widget.BowlStackLayout;
+import com.kkadadeepju.snwf.sendnoods.widget.PlayerScoreTextView;
 
 import java.util.ArrayList;
 
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAMES;
-import static com.kkadadeepju.snwf.sendnoodswithfriends.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAMES;
+import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_USERS;
 
 
 /**
@@ -138,7 +137,7 @@ public class EndOfTurnDIalog extends Dialog {
                 if (playerTaps > curBest) {
                     userWinLose.setText("You Win!");
                 } else {
-                    userWinLose.setText("Try Harder Text Time!");
+                    userWinLose.setText("Try Harder Next Time!");
                 }
             }
 

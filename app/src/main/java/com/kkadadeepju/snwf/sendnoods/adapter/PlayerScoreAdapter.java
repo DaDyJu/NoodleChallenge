@@ -1,22 +1,16 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends.adapter;
+package com.kkadadeepju.snwf.sendnoods.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.kkadadeepju.snwf.sendnoodswithfriends.R;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.PlayerInfo;
-import com.kkadadeepju.snwf.sendnoodswithfriends.model.UserInfo;
+import com.kkadadeepju.snwf.sendnoods.R;
+import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static android.R.id.list;
 
 /**
  * Created by Junyu on 2017-04-22.

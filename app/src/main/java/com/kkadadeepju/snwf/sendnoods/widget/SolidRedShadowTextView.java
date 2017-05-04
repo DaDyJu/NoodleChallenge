@@ -1,11 +1,10 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends.widget;
+package com.kkadadeepju.snwf.sendnoods.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 // http://stackoverflow.com/questions/35897146/borderlike-shadow-solid-and-large-on-textview-android
 public class SolidRedShadowTextView extends AppCompatTextView {

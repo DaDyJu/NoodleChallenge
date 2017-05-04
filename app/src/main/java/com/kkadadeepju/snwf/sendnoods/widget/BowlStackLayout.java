@@ -1,23 +1,12 @@
-package com.kkadadeepju.snwf.sendnoodswithfriends.widget;
+package com.kkadadeepju.snwf.sendnoods.widget;
 
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.kkadadeepju.snwf.sendnoodswithfriends.R;
-
-import static android.R.attr.clipChildren;
-import static android.R.attr.clipToPadding;
-import static android.R.attr.gravity;
-import static android.R.attr.id;
-import static android.R.attr.layout_gravity;
-import static android.R.attr.layout_height;
-import static android.R.attr.layout_weight;
-import static android.R.attr.layout_width;
-import static android.R.attr.orientation;
+import com.kkadadeepju.snwf.sendnoods.R;
 
 /**
  * Created by Junyu on 2017-04-23.
