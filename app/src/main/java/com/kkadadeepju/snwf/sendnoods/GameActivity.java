@@ -188,7 +188,7 @@ public class GameActivity extends AppCompatActivity {
         noodleBowl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //playOiSound();
+                playOiSound();
 
                 if (isSendNoodsActive) {
                     return;
