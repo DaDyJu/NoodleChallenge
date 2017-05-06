@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SCORE = "score";
 
     public static final int WAITING_TIME = 6;
-    SocketManager manager;
+
     private boolean isLookingForGame = false;
     private Button findGame;
     private ViewGroup loadingDialogContainer;
