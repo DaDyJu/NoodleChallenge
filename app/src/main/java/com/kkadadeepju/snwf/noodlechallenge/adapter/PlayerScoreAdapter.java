@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods.adapter;
+package com.kkadadeepju.snwf.noodlechallenge.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kkadadeepju.snwf.sendnoods.R;
-import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
+import com.kkadadeepju.snwf.noodlechallenge.R;
+import com.kkadadeepju.snwf.noodlechallenge.model.UserInfo;
 
 import java.util.ArrayList;
 

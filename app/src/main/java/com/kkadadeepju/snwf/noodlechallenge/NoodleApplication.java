@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods;
+package com.kkadadeepju.snwf.noodlechallenge;
 
 import android.app.Application;
 

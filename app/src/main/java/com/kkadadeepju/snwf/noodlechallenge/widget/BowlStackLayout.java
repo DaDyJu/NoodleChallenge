@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods.widget;
+package com.kkadadeepju.snwf.noodlechallenge.widget;
 
 import android.content.Context;
 import android.util.TypedValue;
@@ -6,7 +6,7 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.kkadadeepju.snwf.sendnoods.R;
+import com.kkadadeepju.snwf.noodlechallenge.R;
 
 /**
  * Created by Junyu on 2017-04-23.

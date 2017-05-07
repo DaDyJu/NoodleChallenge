@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods;
+package com.kkadadeepju.snwf.noodlechallenge;
 
 /**
  * Created by dportetrachsel on 4/20/17.

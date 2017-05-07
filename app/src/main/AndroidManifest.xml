@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kkadadeepju.snwf.sendnoods">
+    package="com.kkadadeepju.snwf.noodlechallenge">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.kkadadeepju.snwf.sendnoods.MainActivity">
+        <activity android:name="com.kkadadeepju.snwf.noodlechallenge.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.kkadadeepju.snwf.sendnoods.GameActivity"
+            android:name="com.kkadadeepju.snwf.noodlechallenge.GameActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
     </application>
 

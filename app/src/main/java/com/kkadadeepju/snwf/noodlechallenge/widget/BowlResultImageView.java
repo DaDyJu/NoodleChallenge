@@ -1,10 +1,10 @@
-package com.kkadadeepju.snwf.sendnoods.widget;
+package com.kkadadeepju.snwf.noodlechallenge.widget;
 
 import android.content.Context;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.kkadadeepju.snwf.sendnoods.R;
+import com.kkadadeepju.snwf.noodlechallenge.R;
 
 /**
  * Created by jzhou on 2017-04-21.

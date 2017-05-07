@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods;
+package com.kkadadeepju.snwf.noodlechallenge;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,25 +31,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kkadadeepju.snwf.sendnoods.adapter.PlayerScoreAdapter;
-import com.kkadadeepju.snwf.sendnoods.dialog.EndOfTurnDIalog;
-import com.kkadadeepju.snwf.sendnoods.model.GameState;
-import com.kkadadeepju.snwf.sendnoods.model.PowerUp;
-import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
-import com.kkadadeepju.snwf.sendnoods.widget.BowlImageView;
+import com.kkadadeepju.snwf.noodlechallenge.adapter.PlayerScoreAdapter;
+import com.kkadadeepju.snwf.noodlechallenge.dialog.EndOfTurnDIalog;
+import com.kkadadeepju.snwf.noodlechallenge.model.GameState;
+import com.kkadadeepju.snwf.noodlechallenge.model.PowerUp;
+import com.kkadadeepju.snwf.noodlechallenge.model.UserInfo;
+import com.kkadadeepju.snwf.noodlechallenge.widget.BowlImageView;
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAMES;
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_POWER_UPS;
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_STATES;
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_USERS;
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_ID;
-import static com.kkadadeepju.snwf.sendnoods.MainActivity.SCORE;
-import static com.kkadadeepju.snwf.sendnoods.Constants.USER_ID;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAMES;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAME_POWER_UPS;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAME_STATES;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAME_ID;
+import static com.kkadadeepju.snwf.noodlechallenge.MainActivity.SCORE;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.USER_ID;
 
 
 /**
@@ -70,7 +70,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView noodleBowl;
     private ImageView chopStickUp;
     private ImageView chopStickDown;
-    private ImageView powerUpsendNoods;
+    private ImageView powerUpnoodlechallenge;
     private ImageView powerUpsendVirate;
 
     private RecyclerView playerRvView;
@@ -85,7 +85,7 @@ public class GameActivity extends AppCompatActivity {
     private boolean mp2Released = true;
     private boolean mp3Released = true;
 
-    private ViewGroup sendNoodsLayout;
+    private ViewGroup noodlechallengeLayout;
     private TextView gameStartCountdown;
 
     private LinearLayout finishedBowlContainer;
@@ -98,8 +98,8 @@ public class GameActivity extends AppCompatActivity {
 
     private boolean isChopstickUp = false;
 
-    private boolean isSendNoodsActive = false;
-    private int numberOfSendNoodsLeft;
+    private boolean isnoodlechallengeActive = false;
+    private int numberOfnoodlechallengeLeft;
     private Drawable mBowlStack;
 
     private static final int[] bowls = {
@@ -114,7 +114,7 @@ public class GameActivity extends AppCompatActivity {
             R.drawable.noods_09
     };
 
-    private ArrayList<ImageView> sendNoods = new ArrayList<>();
+    private ArrayList<ImageView> noodlechallenge = new ArrayList<>();
 
     private ArrayList<Drawable> images = new ArrayList<>();
 
@@ -138,7 +138,7 @@ public class GameActivity extends AppCompatActivity {
         chopStickUp = (ImageView) findViewById(R.id.chopstick_up);
         chopStickDown = (ImageView) findViewById(R.id.chopstick_down);
         noodleBowl = (ImageView) findViewById(R.id.noodle_bowl);
-        powerUpsendNoods = (ImageView) findViewById(R.id.powerup_send_noodle);
+        powerUpnoodlechallenge = (ImageView) findViewById(R.id.powerup_send_noodle);
         powerUpsendVirate = (ImageView) findViewById(R.id.powerup_send_vibrate);
 
         playerRvView = (RecyclerView) findViewById(R.id.rvPlayers);
@@ -169,16 +169,16 @@ public class GameActivity extends AppCompatActivity {
 
         timer.setText(GAME_TIME_MILLIS / 1000 + "s");
 
-        sendNoodsLayout = (ViewGroup) findViewById(R.id.send_noods_layout);
-        sendNoodsLayout.setVisibility(View.GONE);
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_1));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_2));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_3));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_4));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_5));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_6));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_7));
-        sendNoods.add((ImageView) findViewById(R.id.send_noods_8));
+        noodlechallengeLayout = (ViewGroup) findViewById(R.id.send_noods_layout);
+        noodlechallengeLayout.setVisibility(View.GONE);
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_1));
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_2));
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_3));
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_4));
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_5));
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_6));
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_7));
+        noodlechallenge.add((ImageView) findViewById(R.id.send_noods_8));
 
         final Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
 
@@ -190,7 +190,7 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 playOiSound();
 
-                if (isSendNoodsActive) {
+                if (isnoodlechallengeActive) {
                     return;
                 }
 
@@ -274,7 +274,7 @@ public class GameActivity extends AppCompatActivity {
         noodleBowl.setClickable(false);
         //resetMPs();
         mDatabase.child(curGameId).child(GAME_USERS).child(curUserId).child(SCORE).setValue(score);
-        mDatabase.child(curGameId).child(GAME_STATES).child(curUserId).setValue(new GameState(true, score, NCUserPreference.getUserGameName(GameActivity.this)));
+        mDatabase.child(curGameId).child(GAME_STATES).child(curUserId).setValue(new GameState(true, score, com.kkadadeepju.snwf.noodlechallenge.NCUserPreference.getUserGameName(GameActivity.this)));
 
         showResultDialog();
     }
@@ -328,7 +328,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void registerGameStartState() {
-        mDatabase.child(curGameId).child(GAME_STATES).child(curUserId).setValue(new GameState(false, -1, NCUserPreference.getUserGameName(GameActivity.this)));
+        mDatabase.child(curGameId).child(GAME_STATES).child(curUserId).setValue(new GameState(false, -1, com.kkadadeepju.snwf.noodlechallenge.NCUserPreference.getUserGameName(GameActivity.this)));
     }
 
     private void setUpGameEventListener() {
@@ -371,7 +371,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 PowerUp powerUp = dataSnapshot.getValue(PowerUp.class);
-                if (!powerUp.userId.equals(NCUserPreference.getUserId(GameActivity.this))) {
+                if (!powerUp.userId.equals(com.kkadadeepju.snwf.noodlechallenge.NCUserPreference.getUserId(GameActivity.this))) {
                     // not ur own power up
                     handlePowerup(powerUp.powerUpType);
                 }
@@ -420,15 +420,15 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setUpPowerListner() {
-        powerUpsendNoods.setOnClickListener(new View.OnClickListener() {
+        powerUpnoodlechallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new ParticleSystem(GameActivity.this, 100, R.drawable.sendnoods_particle, 1000)
                         .setSpeedRange(0.2f, 0.3f)
-                        .oneShot(powerUpsendNoods, 100);
-                powerUpsendNoods.setAlpha(127);
+                        .oneShot(powerUpnoodlechallenge, 100);
+                powerUpnoodlechallenge.setAlpha(127);
                 sendPowerUp(SEND_NOODLE_POWER_UP);
-                powerUpsendNoods.setClickable(false);
+                powerUpnoodlechallenge.setClickable(false);
             }
         });
 
@@ -446,7 +446,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void sendPowerUp(int type) {
-        mDatabase.child(curGameId).child(GAME_POWER_UPS).push().setValue(new PowerUp(NCUserPreference.getUserId(GameActivity.this), type));
+        mDatabase.child(curGameId).child(GAME_POWER_UPS).push().setValue(new PowerUp(com.kkadadeepju.snwf.noodlechallenge.NCUserPreference.getUserId(GameActivity.this), type));
     }
 
     public void handlePowerup(int type) {
@@ -466,23 +466,23 @@ public class GameActivity extends AppCompatActivity {
         // received a bunch of noods from playerName
         // fills up their whole screen with noodles, their score does not count until their extra noodles are gone
         // and they are back to tapping on their regular noodle bowl
-        isSendNoodsActive = true;
-        sendNoodsLayout.setVisibility(View.VISIBLE);
-        numberOfSendNoodsLeft = sendNoods.size();
+        isnoodlechallengeActive = true;
+        noodlechallengeLayout.setVisibility(View.VISIBLE);
+        numberOfnoodlechallengeLeft = noodlechallenge.size();
 
-        for (int i = 0; i < sendNoods.size(); i++) {
-            sendNoods.get(i).setVisibility(View.VISIBLE);
+        for (int i = 0; i < noodlechallenge.size(); i++) {
+            noodlechallenge.get(i).setVisibility(View.VISIBLE);
 
-            sendNoods.get(i).setOnClickListener(
+            noodlechallenge.get(i).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             v.setVisibility(View.INVISIBLE);
-                            numberOfSendNoodsLeft--;
+                            numberOfnoodlechallengeLeft--;
 
-                            if (numberOfSendNoodsLeft <= 0) {
-                                isSendNoodsActive = false;
-                                sendNoodsLayout.setVisibility(View.GONE);
+                            if (numberOfnoodlechallengeLeft <= 0) {
+                                isnoodlechallengeActive = false;
+                                noodlechallengeLayout.setVisibility(View.GONE);
                             }
                         }
                     }

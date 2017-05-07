@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods.widget;
+package com.kkadadeepju.snwf.noodlechallenge.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

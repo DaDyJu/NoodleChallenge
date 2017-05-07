@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods;
+package com.kkadadeepju.snwf.noodlechallenge;
 
 /**
  * Created by ykim on 2017-04-20.
@@ -6,7 +6,7 @@ package com.kkadadeepju.snwf.sendnoods;
 
 public class Powerups {
     public enum Types {
-        SendNoods,
+        noodlechallenge,
         SendLag,
         SendVibrate
     }

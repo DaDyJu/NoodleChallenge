@@ -1,11 +1,11 @@
-package com.kkadadeepju.snwf.sendnoods;
+package com.kkadadeepju.snwf.noodlechallenge;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import static com.kkadadeepju.snwf.sendnoods.Constants.PREFERENCE_NAME;
-import static com.kkadadeepju.snwf.sendnoods.Constants.USER_GAME_ID;
-import static com.kkadadeepju.snwf.sendnoods.Constants.USER_GAME_NAME;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.PREFERENCE_NAME;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.USER_GAME_ID;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.USER_GAME_NAME;
 
 /**
  * Created by Junyu on 2017-04-22.

@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:background="#5f679c"
     android:orientation="vertical"
-    tools:context="com.kkadadeepju.snwf.sendnoods.MainActivity">
+    tools:context="com.kkadadeepju.snwf.noodlechallenge.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"

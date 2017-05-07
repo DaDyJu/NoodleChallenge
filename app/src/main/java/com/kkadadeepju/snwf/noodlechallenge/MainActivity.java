@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods;
+package com.kkadadeepju.snwf.noodlechallenge;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,19 +21,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kkadadeepju.snwf.sendnoods.model.GameClass;
-import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
+import com.kkadadeepju.snwf.noodlechallenge.model.GameClass;
+import com.kkadadeepju.snwf.noodlechallenge.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAMES;
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_ID;
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_USERS;
-import static com.kkadadeepju.snwf.sendnoods.Constants.IS_GAME_STARTED;
-import static com.kkadadeepju.snwf.sendnoods.Constants.TIME_WAITING;
-import static com.kkadadeepju.snwf.sendnoods.Constants.USER_ID;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAMES;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAME_ID;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.IS_GAME_STARTED;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.TIME_WAITING;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.USER_ID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,19 +84,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //startMusic();
         showLoadingDialog(isLookingForGame);
+
+        startMusic();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //stopMusic();
+        stopMusic();
     }
 
     private void startMusic() {

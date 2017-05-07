@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods.dialog;
+package com.kkadadeepju.snwf.noodlechallenge.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -19,18 +19,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kkadadeepju.snwf.sendnoods.MainActivity;
-import com.kkadadeepju.snwf.sendnoods.NCUserPreference;
-import com.kkadadeepju.snwf.sendnoods.R;
-import com.kkadadeepju.snwf.sendnoods.model.UserInfo;
-import com.kkadadeepju.snwf.sendnoods.widget.BowlResultImageView;
-import com.kkadadeepju.snwf.sendnoods.widget.BowlStackLayout;
-import com.kkadadeepju.snwf.sendnoods.widget.PlayerScoreTextView;
+import com.kkadadeepju.snwf.noodlechallenge.MainActivity;
+import com.kkadadeepju.snwf.noodlechallenge.NCUserPreference;
+import com.kkadadeepju.snwf.noodlechallenge.R;
+import com.kkadadeepju.snwf.noodlechallenge.model.UserInfo;
+import com.kkadadeepju.snwf.noodlechallenge.widget.BowlResultImageView;
+import com.kkadadeepju.snwf.noodlechallenge.widget.BowlStackLayout;
+import com.kkadadeepju.snwf.noodlechallenge.widget.PlayerScoreTextView;
 
 import java.util.ArrayList;
 
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAMES;
-import static com.kkadadeepju.snwf.sendnoods.Constants.GAME_USERS;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAMES;
+import static com.kkadadeepju.snwf.noodlechallenge.Constants.GAME_USERS;
 
 
 /**

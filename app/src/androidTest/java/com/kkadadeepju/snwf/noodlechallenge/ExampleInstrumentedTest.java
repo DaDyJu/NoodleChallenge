@@ -1,4 +1,4 @@
-package com.kkadadeepju.snwf.sendnoods;
+package com.kkadadeepju.snwf.noodlechallenge;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.kkadadeepju.snwf.sendnoodswithfriends", appContext.getPackageName());
+        assertEquals("com.kkadadeepju.snwf.noodlechallenge", appContext.getPackageName());
     }
 }
