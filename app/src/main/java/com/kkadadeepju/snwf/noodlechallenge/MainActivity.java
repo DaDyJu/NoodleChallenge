@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
 
+    private boolean isHost = false;
+
+    private String hostGameId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        // do nothing
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         showLoadingDialog(isLookingForGame);
@@ -99,6 +108,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         stopMusic();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isHost) {
+            setStartGameState(hostGameId);
+        }
     }
 
     private void startMusic() {
@@ -165,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     final GameClass gameClass = snapshot.getValue(GameClass.class);
-                    if (gameClass.gameWaiting > 0) {
+                    if (!gameClass.isGameStarted) {
                         // join existing game
                         final String tempUserId = mDatabase.child(gameClass.gameId).child(GAME_USERS).push().getKey();
                         NCUserPreference.setUserGameId(MainActivity.this, tempUserId);
@@ -189,7 +206,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // create a new Game
+                isHost = true;
                 final String gameId = mDatabase.push().getKey();
+                hostGameId = gameId;
                 Map<String, Object> gameInfo = new HashMap<>();
                 gameInfo.put(GAME_ID, gameId);
                 gameInfo.put(TIME_WAITING, WAITING_TIME);
@@ -209,8 +228,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     public void onFinish() {
-                        mDatabase.child(gameId).child(TIME_WAITING).setValue(-1);
-                        mDatabase.child(gameId).child(IS_GAME_STARTED).setValue(true);
+
+                        setStartGameState(gameId);
                         startGame(gameId, userId);
                         // start the game
                     }
@@ -223,6 +242,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setStartGameState(String gameId){
+        mDatabase.child(gameId).child(TIME_WAITING).setValue(-1);
+        mDatabase.child(gameId).child(IS_GAME_STARTED).setValue(true);
     }
 
     private void startGame(String gameId, String userId) {
